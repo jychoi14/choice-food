@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>심플 로또 번호 생성기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --border-color: #e2e8f0;
+            
+            /* 로또 공 색상 */
+            --ball-yellow: radial-gradient(circle at 30% 30%, #fef08a 0%, #facc15 50%, #ca8a04 100%);
+            --ball-blue: radial-gradient(circle at 30% 30%, #bfdbfe 0%, #3b82f6 50%, #1d4ed8 100%);
+            --ball-red: radial-gradient(circle at 30% 30%, #fecaca 0%, #ef4444 50%, #b91c1c 100%);
+            --ball-gray: radial-gradient(circle at 30% 30%, #e2e8f0 0%, #94a3b8 50%, #475569 100%);
+            --ball-green: radial-gradient(circle at 30% 30%, #bbf7d0 0%, #22c55e 50%, #15803d 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            padding: 40px 30px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #4f46e5, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        /* 로또 공 영역 */
+        .balls-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            min-height: 72px;
+            padding: 0 10px;
+        }
+
+        .ball-placeholder {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 2px dashed var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbd5e1;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .ball {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), inset 0 -4px 6px rgba(0, 0, 0, 0.1);
+            transform: scale(0);
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes popIn {
+            to {
+                transform: scale(1);
+            }
+        }
+
+        /* 번호 대역별 배경색 클래스 */
+        .ball-num-1 { background: var(--ball-yellow); }
+        .ball-num-2 { background: var(--ball-blue); }
+        .ball-num-3 { background: var(--ball-red); }
+        .ball-num-4 { background: var(--ball-gray); }
+        .ball-num-5 { background: var(--ball-green); }
+
+        /* 컨트롤 버튼 */
+        .btn-generate {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+            outline: none;
+        }
+
+        .btn-generate:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
+        }
+
+        /* 생성 이력 영역 */
+        .history-section {
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 30px;
+            text-align: left;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .history-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .btn-clear-history {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .btn-clear-history:hover {
+            color: #ef4444;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        /* 스크롤바 커스텀 */
+        .history-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .history-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .history-list::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .history-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .history-balls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .history-ball {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 900;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-history {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+            padding: 20px 0;
+        }
+
+        /* 반응형 대응 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 18px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            .balls-container {
+                gap: 6px;
+                justify-content: center;
+            }
+            .ball, .ball-placeholder {
+                width: 44px;
+                height: 44px;
+                font-size: 16px;
+            }
+            .history-ball {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+            .history-time {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>로또 번호 생성기</h1>
+        <div class="subtitle">버튼을 누르면 행운의 번호 6개가 생성됩니다.</div>
+
+        <!-- 로또 공 표시 구역 -->
+        <div class="balls-container" id="ballsContainer">
+            <div class="ball-placeholder">?</div>
+            <div class="ball-placeholder">?</div>
+            <div class="ball-placeholder">?</div>
+            <div class="ball-placeholder">?</div>
+            <div class="ball-placeholder">?</div>
+            <div class="ball-placeholder">?</div>
+        </div>
+
+        <button class="btn-generate" id="btnGenerate" onclick="generateLottoNumbers()">번호 생성하기</button>
+
+        <!-- 이전 생성 내역 -->
+        <div class="history-section">
+            <div class="history-header">
+                <span class="history-title">최근 생성 기록</span>
+                <button class="btn-clear-history" onclick="clearHistory()">기록 지우기</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <!-- 기록 동적 추가 영역 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio API를 활용한 효과음 발생 함수
+        function playPopSound(index) {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                // 음의 주파수를 인덱스에 따라 다르게 하여 계단식 상승음 표현 (도레미파솔라...)
+                const frequencies = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00];
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(frequencies[index % frequencies.length], ctx.currentTime);
+                
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                // 빠르게 음이 작아지는 효과 (통통 튀는 느낌)
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch (e) {
+                // 브라우저의 오디오 정책 등에 의해 차단되는 경우 예외처리
+                console.log('Audio Context error:', e);
+            }
+        }
+
+        // 로또 공 색상 스타일 구분을 위한 헬퍼 함수
+        function getBallClass(num) {
+            if (num <= 10) return 'ball-num-1'; // 1 ~ 10: 노랑
+            if (num <= 20) return 'ball-num-2'; // 11 ~ 20: 파랑
+            if (num <= 30) return 'ball-num-3'; // 21 ~ 30: 빨강
+            if (num <= 40) return 'ball-num-4'; // 31 ~ 40: 회색
+            return 'ball-num-5';                // 41 ~ 45: 초록
+        }
+
+        // 로컬스토리지 관련 기능
+        const HISTORY_KEY = 'lotto_history';
+
+        function loadHistory() {
+            const historyList = document.getElementById('historyList');
+            const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="no-history">최근 생성된 기록이 없습니다.</div>';
+                return;
+            }
+
+            historyList.innerHTML = history.map(item => {
+                const ballsHtml = item.numbers.map(num => `
+                    <div class="history-ball ${getBallClass(num)}">${num}</div>
+                `).join('');
+
+                return `
+                    <div class="history-item">
+                        <span class="history-time">${item.time}</span>
+                        <div class="history-balls">${ballsHtml}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function saveToHistory(numbers) {
+            const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+            const now = new Date();
+            const timeStr = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            // 새 기록 맨 앞에 추가
+            history.unshift({
+                time: timeStr,
+                numbers: numbers
+            });
+
+            // 최대 10개만 유지
+            if (history.length > 10) {
+                history.pop();
+            }
+
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+            loadHistory();
+        }
+
+        function clearHistory() {
+            localStorage.removeItem(HISTORY_KEY);
+            loadHistory();
+        }
+
+        // 로또 번호 생성 코어 로직
+        function generateLottoNumbers() {
+            const btn = document.getElementById('btnGenerate');
+            if (btn.disabled) return; // 애니메이션 재생 중 중복 클릭 방지
+            btn.disabled = true;
+
+            const container = document.getElementById('ballsContainer');
+            container.innerHTML = ''; // 초기화
+
+            // 1~45 중 중복 없이 6개 번호 추출
+            const pool = Array.from({ length: 45 }, (_, i) => i + 1);
+            const selected = [];
+            
+            for (let i = 0; i < 6; i++) {
+                const randomIndex = Math.floor(Math.random() * pool.length);
+                selected.push(pool[randomIndex]);
+                pool.splice(randomIndex, 1);
+            }
+
+            // 오름차순 정렬
+            selected.sort((a, b) => a - b);
+
+            // 하나씩 순차적으로 나타나는 애니메이션 효과
+            selected.forEach((num, index) => {
+                setTimeout(() => {
+                    const ball = document.createElement('div');
+                    ball.className = `ball ${getBallClass(num)}`;
+                    ball.innerText = num;
+                    container.appendChild(ball);
+                    
+                    // 효과음 재생
+                    playPopSound(index);
+
+                    // 마지막 공까지 다 나왔을 때
+                    if (index === 5) {
+                        saveToHistory(selected);
+                        btn.disabled = false;
+                    }
+                }, index * 250); // 0.25초 간격으로 공 노출
+            });
+        }
+
+        // 페이지 초기 진입 시 기록 불러오기
+        window.onload = function() {
+            loadHistory();
+        };
+    </script>
+</body>
+</html>
