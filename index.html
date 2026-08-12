@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <meta name="google-adsense-account" content="ca-pub-3060510773916611">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3060510773916611" crossorigin="anonymous"></script>
     <script>
         (function() {
             const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -328,6 +330,155 @@
             .slot-content { font-size: 24px; }
             .image-container { height: 180px; }
         }
+
+        /* 푸터 제휴 문의 링크 */
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .link-contact {
+            color: var(--text-secondary);
+            text-decoration: underline;
+            background: none;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .link-contact:hover {
+            color: var(--primary-color);
+        }
+
+        /* 제휴 문의 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeInModal 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 440px;
+            padding: 30px 24px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            animation: slideUpModal 0.3s ease;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUpModal {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            line-height: 1;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--selector-bg);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+        }
+
+        textarea.form-control {
+            resize: none;
+            height: 100px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2);
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-submit:disabled {
+            filter: grayscale(1);
+            cursor: not-allowed;
+            transform: none;
+        }
     </style>
 </head>
 <body>
@@ -366,6 +517,39 @@
         </div>
     </div>
 
+    <div class="footer-links">
+        <button id="btnContact" class="link-contact" onclick="openContactModal()">제휴 문의</button>
+    </div>
+
+    <!-- 제휴 문의 모달 -->
+    <div id="contactModal" class="modal" onclick="handleModalClick(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="modalTitle">제휴 및 문의</span>
+                <button class="btn-close" onclick="closeContactModal()">&times;</button>
+            </div>
+            <form id="contactForm" onsubmit="submitForm(event)">
+                <div class="form-group">
+                    <label id="labelCompany" for="company">회사명 / 이름</label>
+                    <input type="text" id="company" name="company" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label id="labelEmail" for="email">이메일 주소</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label id="labelPhone" for="phone">연락처 (선택)</label>
+                    <input type="tel" id="phone" name="phone" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label id="labelMessage" for="message">문의 내용</label>
+                    <textarea id="message" name="message" class="form-control" required></textarea>
+                </div>
+                <button type="submit" id="btnSubmit" class="btn-submit">보내기</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         const i18n = {
             ko: {
@@ -378,7 +562,21 @@
                 ready: "준비됐나요?",
                 categories: {
                     all: "전체", korean: "한식", japanese: "일식", chinese: "중식", western: "양식", snack: "분식", dessert: "디저트"
-                }
+                },
+                contactLink: "제휴 문의",
+                contactTitle: "제휴 및 문의",
+                labelCompany: "회사명 / 이름",
+                placeholderCompany: "회사명 또는 이름을 입력해주세요",
+                labelEmail: "이메일 주소",
+                placeholderEmail: "example@email.com",
+                labelPhone: "연락처 (선택)",
+                placeholderPhone: "연락처를 입력해주세요",
+                labelMessage: "문의 내용",
+                placeholderMessage: "문의 내용을 입력해주세요",
+                btnSend: "보내기",
+                sending: "전송 중...",
+                sendSuccess: "문의가 성공적으로 전송되었습니다. 감사합니다!",
+                sendError: "전송에 실패했습니다. 다시 시도해주세요."
             },
             en: {
                 title: "What to Eat?",
@@ -390,7 +588,21 @@
                 ready: "Ready?",
                 categories: {
                     all: "All", korean: "Korean", japanese: "Japanese", chinese: "Chinese", western: "Western", snack: "Snack", dessert: "Dessert"
-                }
+                },
+                contactLink: "Partnership / Contact Us",
+                contactTitle: "Partnership & Inquiry",
+                labelCompany: "Company / Name",
+                placeholderCompany: "Enter company name or your name",
+                labelEmail: "Email Address",
+                placeholderEmail: "example@email.com",
+                labelPhone: "Contact Number (Optional)",
+                placeholderPhone: "Phone number",
+                labelMessage: "Inquiry Content",
+                placeholderMessage: "Enter your inquiry content",
+                btnSend: "Submit",
+                sending: "Sending...",
+                sendSuccess: "Your inquiry has been sent successfully. Thank you!",
+                sendError: "Failed to send. Please try again."
             }
         };
 
@@ -424,6 +636,19 @@
             document.getElementById('btnClear').innerText = text.clear;
             document.getElementById('slotContent').innerText = text.ready;
             
+            // Translate contact-related elements
+            document.getElementById('btnContact').innerText = text.contactLink;
+            document.getElementById('modalTitle').innerText = text.contactTitle;
+            document.getElementById('labelCompany').innerText = text.labelCompany;
+            document.getElementById('company').placeholder = text.placeholderCompany;
+            document.getElementById('labelEmail').innerText = text.labelEmail;
+            document.getElementById('email').placeholder = text.placeholderEmail;
+            document.getElementById('labelPhone').innerText = text.labelPhone;
+            document.getElementById('phone').placeholder = text.placeholderPhone;
+            document.getElementById('labelMessage').innerText = text.labelMessage;
+            document.getElementById('message').placeholder = text.placeholderMessage;
+            document.getElementById('btnSubmit').innerText = text.btnSend;
+
             const catContainer = document.getElementById('categoryContainer');
             catContainer.innerHTML = '';
             Object.keys(text.categories).forEach(key => {
@@ -541,6 +766,63 @@
             document.documentElement.setAttribute('data-theme', target);
             localStorage.setItem('theme', target);
             document.getElementById('themeToggle').innerText = target === 'dark' ? '☀️' : '🌙';
+        };
+
+        const openContactModal = () => {
+            const modal = document.getElementById('contactModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeContactModal = () => {
+            const modal = document.getElementById('contactModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+            document.getElementById('contactForm').reset();
+        };
+
+        const handleModalClick = (e) => {
+            if (e.target.id === 'contactModal') {
+                closeContactModal();
+            }
+        };
+
+        const submitForm = async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const btn = document.getElementById('btnSubmit');
+            const text = i18n[currentLang];
+
+            btn.disabled = true;
+            btn.innerText = text.sending;
+
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+
+            try {
+                const response = await fetch("https://formspree.io/f/xoeawaql", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert(text.sendSuccess);
+                    closeContactModal();
+                } else {
+                    const errData = await response.json();
+                    alert(errData.error || text.sendError);
+                }
+            } catch (err) {
+                alert(text.sendError);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = text.btnSend;
+            }
         };
 
         window.onload = () => {
