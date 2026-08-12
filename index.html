@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>오늘 뭐 먹지? | 최고의 메뉴 추천 서비스</title>
+    <title>오늘 뭐 먹지? | What Should I Eat Today?</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -11,6 +11,8 @@
         (function() {
             const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             document.documentElement.setAttribute('data-theme', savedTheme);
+            const savedLang = localStorage.getItem('lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
+            document.documentElement.setAttribute('data-lang', savedLang);
         })();
     </script>
     <style>
@@ -72,13 +74,18 @@
             transition: all 0.3s ease;
         }
 
-        .btn-theme-toggle {
+        .top-controls {
             position: absolute;
             top: 24px;
             right: 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-control {
             background: none;
             border: none;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
             padding: 8px;
             border-radius: 50%;
@@ -87,9 +94,10 @@
             justify-content: center;
             transition: all 0.2s;
             color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
 
-        .btn-theme-toggle:hover {
+        .btn-control:hover {
             background-color: var(--selector-bg);
             transform: scale(1.1);
         }
@@ -196,14 +204,9 @@
             box-shadow: 0 12px 25px rgba(255, 107, 107, 0.4);
         }
 
-        .btn-recommend:active {
-            transform: translateY(0);
-        }
-
         .btn-recommend:disabled {
             filter: grayscale(1);
             cursor: not-allowed;
-            transform: none;
         }
 
         /* 기록 영역 */
@@ -251,19 +254,9 @@
             background: var(--selector-bg);
             padding: 12px 18px;
             border-radius: 15px;
-            animation: slideIn 0.3s ease-out;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .history-menu {
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
+        .history-menu { font-weight: 700; color: var(--primary-color); }
         .history-tag {
             font-size: 10px;
             background: var(--accent-color);
@@ -272,45 +265,29 @@
             border-radius: 4px;
             margin-right: 8px;
         }
-
-        .history-time {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .no-history {
-            color: var(--text-secondary);
-            font-size: 14px;
-            padding: 20px;
-        }
-
-        /* 스크롤바 */
-        .history-list::-webkit-scrollbar { width: 5px; }
-        .history-list::-webkit-scrollbar-track { background: transparent; }
-        .history-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .history-time { font-size: 11px; color: var(--text-secondary); }
+        .no-history { color: var(--text-secondary); font-size: 14px; padding: 20px; }
 
         @media (max-width: 480px) {
             .container { padding: 30px 20px; }
             h1 { font-size: 26px; }
             .slot-content { font-size: 28px; }
+            .top-controls { top: 15px; right: 15px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <button id="themeToggle" class="btn-theme-toggle" onclick="toggleTheme()">🌙</button>
-        <h1>오늘 뭐 먹지?</h1>
-        <p class="subtitle">결정 장애 탈출! 오늘 당신의 운명 메뉴는?</p>
+        <div class="top-controls">
+            <button id="langToggle" class="btn-control" onclick="toggleLang()" aria-label="언어 전환">🌐</button>
+            <button id="themeToggle" class="btn-control" onclick="toggleTheme()" aria-label="테마 전환">🌙</button>
+        </div>
+        <h1 id="title">오늘 뭐 먹지?</h1>
+        <p class="subtitle" id="subtitle">결정 장애 탈출! 오늘 당신의 운명 메뉴는?</p>
 
         <div class="category-container" id="categoryContainer">
-            <button class="btn-category active" data-category="전체">전체</button>
-            <button class="btn-category" data-category="한식">한식</button>
-            <button class="btn-category" data-category="일식">일식</button>
-            <button class="btn-category" data-category="중식">중식</button>
-            <button class="btn-category" data-category="양식">양식</button>
-            <button class="btn-category" data-category="분식">분식</button>
-            <button class="btn-category" data-category="디저트">디저트</button>
+            <!-- Categories will be injected -->
         </div>
 
         <div class="slot-machine">
@@ -322,62 +299,120 @@
 
         <div class="history-section">
             <div class="history-header">
-                <span class="history-title">최근 먹은 기록</span>
-                <button class="btn-clear" onclick="clearHistory()">지우기</button>
+                <span class="history-title" id="historyTitle">최근 먹은 기록</span>
+                <button class="btn-clear" id="btnClear" onclick="clearHistory()">지우기</button>
             </div>
             <div class="history-list" id="historyList">
-                <div class="no-history">아직 기록이 없어요.</div>
+                <div class="no-history" id="noHistory">아직 기록이 없어요.</div>
             </div>
         </div>
     </div>
 
     <script>
+        const i18n = {
+            ko: {
+                title: "오늘 뭐 먹지?",
+                subtitle: "결정 장애 탈출! 오늘 당신의 운명 메뉴는?",
+                recommend: "추천해줘!",
+                historyTitle: "최근 먹은 기록",
+                clear: "지우기",
+                noHistory: "아직 기록이 없어요.",
+                ready: "준비됐나요?",
+                categories: {
+                    all: "전체",
+                    korean: "한식",
+                    japanese: "일식",
+                    chinese: "중식",
+                    western: "양식",
+                    snack: "분식",
+                    dessert: "디저트"
+                }
+            },
+            en: {
+                title: "What to Eat?",
+                subtitle: "No more worries! What's your destiny meal today?",
+                recommend: "Recommend Me!",
+                historyTitle: "Recent History",
+                clear: "Clear",
+                noHistory: "No history yet.",
+                ready: "Ready?",
+                categories: {
+                    all: "All",
+                    korean: "Korean",
+                    japanese: "Japanese",
+                    chinese: "Chinese",
+                    western: "Western",
+                    snack: "Snack",
+                    dessert: "Dessert"
+                }
+            }
+        };
+
         const menuData = [
-            { name: "김치찌개", category: "한식" }, { name: "된장찌개", category: "한식" },
-            { name: "불고기", category: "한식" }, { name: "비빔밥", category: "한식" },
-            { name: "제육볶음", category: "한식" }, { name: "삼겹살", category: "한식" },
-            { name: "초밥", category: "일식" }, { name: "라멘", category: "일식" },
-            { name: "돈가스", category: "일식" }, { name: "규동", category: "일식" },
-            { name: "우동", category: "일식" }, { name: "소바", category: "일식" },
-            { name: "짜장면", category: "중식" }, { name: "짬뽕", category: "중식" },
-            { name: "탕수육", category: "중식" }, { name: "마라탕", category: "중식" },
-            { name: "볶음밥", category: "중식" }, { name: "딤섬", category: "중식" },
-            { name: "파스타", category: "양식" }, { name: "피자", category: "양식" },
-            { name: "스테이크", category: "양식" }, { name: "햄버거", category: "양식" },
-            { name: "리조또", category: "양식" }, { name: "샌드위치", category: "양식" },
-            { name: "떡볶이", category: "분식" }, { name: "김밥", category: "분식" },
-            { name: "라면", category: "분식" }, { name: "순대", category: "분식" },
-            { name: "튀김", category: "분식" }, { name: "쫄면", category: "분식" },
-            { name: "조각케이크", category: "디저트" }, { name: "와플", category: "디저트" },
-            { name: "마카롱", category: "디저트" }, { name: "빙수", category: "디저트" },
-            { name: "크로플", category: "디저트" }, { name: "도넛", category: "디저트" }
+            { nameEn: "Kimchi Stew", nameKo: "김치찌개", category: "korean" },
+            { nameEn: "Soybean Paste Stew", nameKo: "된장찌개", category: "korean" },
+            { nameEn: "Bulgogi", nameKo: "불고기", category: "korean" },
+            { nameEn: "Bibimbap", nameKo: "비빔밥", category: "korean" },
+            { nameEn: "Sushi", nameKo: "초밥", category: "japanese" },
+            { nameEn: "Ramen", nameKo: "라멘", category: "japanese" },
+            { nameEn: "Tonkatsu", nameKo: "돈가스", category: "japanese" },
+            { nameEn: "Tteokbokki", nameKo: "떡볶이", category: "snack" },
+            { nameEn: "Kimbap", nameKo: "김밥", category: "snack" },
+            { nameEn: "Jajangmyeon", nameKo: "짜장면", category: "chinese" },
+            { nameEn: "Jjamppong", nameKo: "짬뽕", category: "chinese" },
+            { nameEn: "Pasta", nameKo: "파스타", category: "western" },
+            { nameEn: "Pizza", nameKo: "피자", category: "western" },
+            { nameEn: "Steak", nameKo: "스테이크", category: "western" },
+            { nameEn: "Burger", nameKo: "햄버거", category: "western" },
+            { nameEn: "Waffle", nameKo: "와플", category: "dessert" },
+            { nameEn: "Cake", nameKo: "조각케이크", category: "dessert" }
         ];
 
-        let currentCategory = "전체";
-        const HISTORY_KEY = 'food_history';
+        let currentLang = localStorage.getItem('lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
+        let currentCategory = "all";
+        const HISTORY_KEY = 'food_history_v2';
 
-        // Sound Engine
+        const updateUI = () => {
+            const text = i18n[currentLang];
+            document.getElementById('title').innerText = text.title;
+            document.getElementById('subtitle').innerText = text.subtitle;
+            document.getElementById('btnRecommend').innerText = text.recommend;
+            document.getElementById('historyTitle').innerText = text.historyTitle;
+            document.getElementById('btnClear').innerText = text.clear;
+            document.getElementById('slotContent').innerText = text.ready;
+            
+            const catContainer = document.getElementById('categoryContainer');
+            catContainer.innerHTML = '';
+            Object.keys(text.categories).forEach(key => {
+                const btn = document.createElement('button');
+                btn.className = `btn-category ${currentCategory === key ? 'active' : ''}`;
+                btn.innerText = text.categories[key];
+                btn.onclick = () => {
+                    currentCategory = key;
+                    updateUI();
+                };
+                catContainer.appendChild(btn);
+            });
+            loadHistory();
+        };
+
         const playSound = (type) => {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-
+                osc.connect(gain); gain.connect(ctx.destination);
                 if (type === 'tick') {
                     osc.frequency.setValueAtTime(440, ctx.currentTime);
                     gain.gain.setValueAtTime(0.1, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.05);
+                    osc.start(); osc.stop(ctx.currentTime + 0.05);
                 } else if (type === 'win') {
-                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.2);
                     gain.gain.setValueAtTime(0.1, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.3);
+                    osc.start(); osc.stop(ctx.currentTime + 0.3);
                 }
             } catch (e) {}
         };
@@ -386,14 +421,14 @@
             const list = document.getElementById('historyList');
             const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
             if (history.length === 0) {
-                list.innerHTML = '<div class="no-history">아직 기록이 없어요.</div>';
+                list.innerHTML = `<div class="no-history">${i18n[currentLang].noHistory}</div>`;
                 return;
             }
             list.innerHTML = history.map(item => `
                 <div class="history-item">
                     <div>
-                        <span class="history-tag">${item.category}</span>
-                        <span class="history-menu">${item.name}</span>
+                        <span class="history-tag">${i18n[currentLang].categories[item.category]}</span>
+                        <span class="history-menu">${currentLang === 'ko' ? item.nameKo : item.nameEn}</span>
                     </div>
                     <span class="history-time">${item.time}</span>
                 </div>
@@ -418,28 +453,34 @@
         const startRecommendation = () => {
             const btn = document.getElementById('btnRecommend');
             const slot = document.getElementById('slotContent');
-            const filtered = currentCategory === "전체" ? menuData : menuData.filter(m => m.category === currentCategory);
+            const filtered = currentCategory === "all" ? menuData : menuData.filter(m => m.category === currentCategory);
             
             btn.disabled = true;
             let count = 0;
-            const maxTicks = 20;
+            const maxTicks = 15;
             const interval = setInterval(() => {
                 const randomMenu = filtered[Math.floor(Math.random() * filtered.length)];
-                slot.innerText = randomMenu.name;
+                slot.innerText = currentLang === 'ko' ? randomMenu.nameKo : randomMenu.nameEn;
                 playSound('tick');
                 count++;
-
                 if (count >= maxTicks) {
                     clearInterval(interval);
                     const finalMenu = filtered[Math.floor(Math.random() * filtered.length)];
-                    slot.innerText = finalMenu.name;
+                    slot.innerText = currentLang === 'ko' ? finalMenu.nameKo : finalMenu.nameEn;
                     slot.style.transform = 'scale(1.2)';
                     setTimeout(() => slot.style.transform = 'scale(1)', 200);
                     playSound('win');
                     saveHistory(finalMenu);
                     btn.disabled = false;
                 }
-            }, 100);
+            }, 120);
+        };
+
+        const toggleLang = () => {
+            currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            localStorage.setItem('lang', currentLang);
+            document.documentElement.setAttribute('data-lang', currentLang);
+            updateUI();
         };
 
         const toggleTheme = () => {
@@ -453,15 +494,7 @@
         window.onload = () => {
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.getElementById('themeToggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
-            loadHistory();
-
-            document.querySelectorAll('.btn-category').forEach(btn => {
-                btn.onclick = () => {
-                    document.querySelectorAll('.btn-category').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentCategory = btn.dataset.category;
-                };
-            });
+            updateUI();
         };
     </script>
 </body>
