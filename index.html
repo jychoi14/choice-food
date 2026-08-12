@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>오늘 뭐 먹지? | 점심·저녁 메뉴 랜덤 추천 서비스</title>
-    <meta name="description" content="매일 반복되는 점심, 저녁 메뉴 고민 해결! 한식, 일식, 중식, 양식, 분식 등 카테고리별 스마트 랜덤 추천 슬롯머신으로 오늘 먹을 음식을 빠르게 정해보세요.">
-    <meta name="keywords" content="오늘뭐먹지, 메뉴추천, 점심메뉴추천, 저녁메뉴추천, 점심추천, 음식랜덤추천, 메뉴룰렛">
+    <title>오늘 뭐 먹지? | 점심·저녁 메뉴 랜덤 추천 & 영양 가이드</title>
+    <meta name="description" content="매일 반복되는 점심, 저녁 메뉴 고민 해결! 한식, 일식, 중식, 양식, 분식, 디저트 카테고리별 스마트 랜덤 추천과 상세 칼로리, 영양 조합 가이드를 제공합니다.">
+    <meta name="keywords" content="오늘뭐먹지, 메뉴추천, 점심메뉴추천, 저녁메뉴추천, 음식랜덤추천, 점심칼로리, 메뉴룰렛, 식단가이드">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="오늘 뭐 먹지? | 결정 장애 탈출 메뉴 추천기">
-    <meta property="og:description" content="고민 없이 바로 정하는 오늘의 운명 메뉴! 지금 슬롯을 돌려보세요.">
+    <meta property="og:title" content="오늘 뭐 먹지? | 결정 장애 탈출 메뉴 추천 & 영양 가이드">
+    <meta property="og:description" content="고민 없이 바로 정하는 오늘의 운명 메뉴! 영양 가이드와 함께 스마트하게 선택해보세요.">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,11 +54,7 @@
             --slot-bg: #000000;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -69,104 +65,59 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px 10px;
-            transition: background-color 0.3s, color 0.3s;
             line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .container {
             position: relative;
             width: 100%;
-            max-width: 520px;
+            max-width: 560px;
             background: var(--card-bg);
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(255, 107, 107, 0.1);
             padding: 40px 24px;
             text-align: center;
             border: 2px solid var(--border-color);
+            margin-bottom: 25px;
             transition: all 0.3s ease;
-            margin-bottom: 20px;
         }
 
         .top-controls {
             position: absolute;
-            top: 24px;
-            right: 24px;
-            display: flex;
-            gap: 12px;
-            z-index: 10;
+            top: 24px; right: 24px;
+            display: flex; gap: 12px; z-index: 10;
         }
 
         .btn-control {
             background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(4px);
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            color: var(--text-primary);
             border: 1px solid var(--border-color);
+            font-size: 18px; cursor: pointer; padding: 8px;
+            border-radius: 50%; color: var(--text-primary);
+            backdrop-filter: blur(4px);
+            transition: all 0.2s;
         }
-
-        .btn-control:hover {
-            background-color: var(--selector-bg);
-            transform: scale(1.1);
-        }
+        .btn-control:hover { transform: scale(1.1); background-color: var(--selector-bg); }
 
         h1 {
-            font-size: 32px;
-            font-weight: 900;
-            margin-bottom: 8px;
+            font-size: 32px; font-weight: 900; margin-bottom: 8px;
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .subtitle {
-            font-size: 15px;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
+        .subtitle { font-size: 15px; color: var(--text-secondary); margin-bottom: 25px; }
 
         .image-container {
-            width: 100%;
-            height: 220px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            background: var(--selector-bg);
-            border: 2px solid var(--border-color);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100%; height: 220px; border-radius: 20px;
+            margin-bottom: 20px; overflow: hidden; background: var(--selector-bg);
+            border: 2px solid var(--border-color); position: relative;
+            display: flex; align-items: center; justify-content: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        #foodImage {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            opacity: 0;
-            transform: scale(1.1);
-        }
-
-        #foodImage.show {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .image-placeholder {
-            position: absolute;
-            font-size: 60px;
-            opacity: 0.2;
-            animation: pulse 2s infinite;
-        }
+        #foodImage { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease; transform: scale(1.05); }
+        #foodImage.show { opacity: 1; transform: scale(1); }
+        .image-placeholder { position: absolute; font-size: 60px; opacity: 0.2; animation: pulse 2s infinite; }
 
         @keyframes pulse {
             0% { transform: scale(1); opacity: 0.2; }
@@ -175,333 +126,112 @@
         }
 
         .slot-machine {
-            background: var(--slot-bg);
-            height: 80px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
+            background: var(--slot-bg); height: 80px; border-radius: 15px;
+            margin-bottom: 20px; display: flex; align-items: center;
+            justify-content: center; border: 3px solid var(--accent-color);
             box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
-            border: 3px solid var(--accent-color);
         }
 
-        .slot-content {
-            font-size: 28px;
-            font-weight: 900;
-            color: var(--slot-text);
-            text-shadow: 0 0 10px rgba(250, 177, 160, 0.5);
-            transition: transform 0.1s ease-in-out;
+        .slot-content { font-size: 28px; font-weight: 900; color: var(--slot-text); text-shadow: 0 0 10px rgba(250, 177, 160, 0.5); }
+
+        /* 메뉴 결정 후 보여지는 풍부한 카드 가이드 */
+        .food-detail-card {
+            background: var(--selector-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 20px;
+            text-align: left;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
-        .category-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 30px;
-        }
+        .food-detail-card.show { display: block; animation: fadeIn 0.4s ease-in-out; }
+        .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .detail-title { font-size: 17px; font-weight: 900; color: var(--primary-color); }
+        .detail-badge { font-size: 11px; background: var(--accent-color); color: #fff; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+        .detail-desc { font-size: 13.5px; color: var(--text-primary); margin-bottom: 10px; line-height: 1.5; }
+        .detail-meta { font-size: 12.5px; color: var(--text-secondary); background: var(--card-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); }
 
+        .category-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 25px; }
         .btn-category {
-            background: var(--select-btn-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 700;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
+            background: var(--select-btn-bg); border: 1px solid var(--border-color);
+            color: var(--text-secondary); padding: 8px 16px; font-size: 13.5px;
+            font-weight: 700; border-radius: 20px; cursor: pointer; transition: all 0.2s;
         }
-
-        .btn-category:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-category.active {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: #ffffff;
-            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
-        }
+        .btn-category:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        .btn-category.active { background-color: var(--primary-color); color: #ffffff; border-color: var(--primary-color); box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3); }
 
         .btn-recommend {
-            width: 100%;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: #ffffff;
-            border: none;
-            padding: 18px;
-            font-size: 22px;
-            font-weight: 900;
-            border-radius: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
+            width: 100%; background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: #ffffff; border: none; padding: 18px; font-size: 22px;
+            font-weight: 900; border-radius: 18px; cursor: pointer; transition: all 0.3s;
             box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
         }
+        .btn-recommend:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(255, 107, 107, 0.4); }
+        .btn-recommend:disabled { filter: grayscale(1); cursor: not-allowed; transform: none; }
 
-        .btn-recommend:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 107, 107, 0.4);
-        }
-
-        .btn-recommend:disabled {
-            filter: grayscale(1);
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .history-section {
-            margin-top: 40px;
-            padding-top: 25px;
-            border-top: 2px dashed var(--border-color);
-        }
-
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .history-title {
-            font-size: 16px;
-            font-weight: 900;
-            color: var(--text-primary);
-        }
-
-        .btn-clear {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 12px;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .history-item {
-            display: flex;
-            align-items: center;
-            background: var(--selector-bg);
-            padding: 10px 15px;
+        /* 광고 레이아웃 사전 확보 구역 */
+        .ad-container {
+            width: 100%;
+            min-height: 100px;
+            background: rgba(0,0,0,0.02);
+            border: 1px dashed var(--border-color);
             border-radius: 15px;
-            gap: 12px;
-            animation: fadeIn 0.3s ease;
+            margin: 25px 0 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .history-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            object-fit: cover;
-            border: 1px solid var(--border-color);
-        }
-
-        .history-info {
-            flex: 1;
-            text-align: left;
-        }
-
-        .history-menu { font-weight: 700; color: var(--primary-color); display: block; }
-        .history-tag {
-            font-size: 10px;
-            background: var(--accent-color);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-right: 5px;
-        }
+        .history-section { margin-top: 30px; padding-top: 20px; border-top: 2px dashed var(--border-color); }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .history-title { font-size: 15px; font-weight: 900; }
+        .btn-clear { background: none; border: none; color: var(--text-secondary); font-size: 12px; cursor: pointer; text-decoration: underline; }
+        .history-list { display: flex; flex-direction: column; gap: 10px; max-height: 220px; overflow-y: auto; padding-right: 4px; }
+        .history-item { display: flex; align-items: center; background: var(--selector-bg); padding: 10px 14px; border-radius: 12px; gap: 12px; }
+        .history-img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border-color); }
+        .history-info { flex: 1; text-align: left; }
+        .history-menu { font-weight: 700; color: var(--primary-color); font-size: 14px; display: block; }
+        .history-tag { font-size: 10px; background: var(--accent-color); color: white; padding: 2px 6px; border-radius: 4px; margin-right: 5px; }
         .history-time { font-size: 11px; color: var(--text-secondary); }
-        .no-history { color: var(--text-secondary); font-size: 14px; padding: 20px; }
+        .no-history { color: var(--text-secondary); font-size: 13.5px; padding: 15px; }
 
-        /* SEO 가치 창출을 위한 추가 콘텐츠 영역 */
+        /* 크롤러 수집용 정교한 풍부한 아티클 섹션 */
         .content-section {
-            width: 100%;
-            max-width: 520px;
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 30px 24px;
-            border: 2px solid var(--border-color);
-            margin-bottom: 20px;
-            text-align: left;
+            width: 100%; max-width: 560px; background: var(--card-bg);
+            border-radius: 26px; padding: 35px 26px; border: 2px solid var(--border-color);
+            margin-bottom: 25px; text-align: left; font-size: 14.5px; color: var(--text-primary);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
         }
 
-        .content-section h2 {
-            font-size: 20px;
-            margin-bottom: 12px;
-            color: var(--primary-color);
-        }
+        .content-section h2 { font-size: 19px; margin: 22px 0 12px 0; color: var(--primary-color); font-weight: 900; }
+        .content-section h2:first-child { margin-top: 0; }
+        .content-section p { margin-bottom: 14px; color: var(--text-secondary); text-align: justify; line-height: 1.7; }
+        .content-section ul { padding-left: 20px; margin-bottom: 14px; color: var(--text-secondary); line-height: 1.7; }
+        .content-section li { margin-bottom: 6px; }
 
-        .content-section p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
+        footer { margin-bottom: 35px; text-align: center; font-size: 12.5px; color: var(--text-secondary); }
+        .footer-links { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .link-footer { color: var(--text-secondary); text-decoration: underline; background: none; border: none; cursor: pointer; font-size: 12.5px; transition: color 0.2s; }
+        .link-footer:hover { color: var(--primary-color); }
 
-        .content-section ul {
-            padding-left: 20px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .content-section li {
-            margin-bottom: 6px;
-        }
-
-        /* 푸터 영역 */
-        footer {
-            margin-top: 10px;
-            margin-bottom: 30px;
-            text-align: center;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .link-footer {
-            color: var(--text-secondary);
-            text-decoration: underline;
-            background: none;
-            border: none;
-            font-family: inherit;
-            cursor: pointer;
-            font-size: 13px;
-            transition: color 0.2s;
-        }
-
-        .link-footer:hover {
-            color: var(--primary-color);
-        }
-
-        /* 모달 공통 스타일 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            animation: fadeInModal 0.3s ease;
-        }
-
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(4px); }
         .modal.show { display: flex; }
+        .modal-content { background: var(--card-bg); border-radius: 24px; width: 100%; max-width: 480px; padding: 30px; max-height: 80vh; overflow-y: auto; text-align: left; border: 2px solid var(--border-color); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-secondary); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13.5px; font-weight: bold; margin-bottom: 6px; }
+        .form-control { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--selector-bg); color: var(--text-primary); font-family: inherit; outline: none; }
+        .btn-submit { width: 100%; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 15px; }
 
-        .modal-content {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 480px;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 30px 24px;
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            text-align: left;
-            animation: slideUpModal 0.3s ease;
-        }
-
-        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUpModal { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .btn-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            line-height: 1;
-        }
-
-        .form-group { margin-bottom: 16px; }
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--text-primary);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background: var(--selector-bg);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .form-control:focus { border-color: var(--primary-color); }
-        textarea.form-control { resize: none; height: 100px; }
-
-        .btn-submit {
-            width: 100%;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2);
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3); }
-        .btn-submit:disabled { filter: grayscale(1); cursor: not-allowed; transform: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 480px) {
-            .container { padding: 30px 20px; }
+            .container { padding: 30px 18px; }
             h1 { font-size: 26px; }
             .slot-content { font-size: 24px; }
             .image-container { height: 180px; }
@@ -523,13 +253,31 @@
             <img id="foodImage" src="" alt="추천 음식 이미지">
         </div>
 
-        <div class="category-container" id="categoryContainer"></div>
-
         <div class="slot-machine">
             <div class="slot-content" id="slotContent">Ready?</div>
         </div>
 
+        <!-- 결과가 나왔을 때 풍부한 영양 가이드를 함께 제공하는 동적 카드 -->
+        <div class="food-detail-card" id="foodDetailCard">
+            <div class="detail-header">
+                <span class="detail-title" id="detailTitle">김치찌개</span>
+                <span class="detail-badge" id="detailCategory">한식</span>
+            </div>
+            <p class="detail-desc" id="detailDesc">설명 문구가 여기에 위치합니다.</p>
+            <div class="detail-meta">
+                <p>🔥 <strong>평균 칼로리:</strong> <span id="detailCalorie">450kcal</span></p>
+                <p style="margin-top: 4px;">🥗 <strong>추천 영양 조합:</strong> <span id="detailPairing">계란말이, 김가루</span></p>
+            </div>
+        </div>
+
+        <div class="category-container" id="categoryContainer"></div>
+
         <button class="btn-recommend" id="btnRecommend" onclick="startRecommendation()">추천해줘!</button>
+
+        <!-- 디스플레이 광고 슬롯 구역 -->
+        <div class="ad-container">
+            <span>ADVERTISEMENT</span>
+        </div>
 
         <div class="history-section">
             <div class="history-header">
@@ -542,20 +290,25 @@
         </div>
     </div>
 
-    <!-- SEO 및 유저 가치 제공을 위한 설명 섹션 -->
-    <article class="content-section" id="seoContent">
-        <h2>매일 반복되는 '오늘 뭐 먹지?' 고민 해결법</h2>
-        <p>점심시간이나 퇴근 후 저녁 메뉴를 정할 때 결정 장애를 겪으신 적이 있나요? '오늘 뭐 먹지?' 서비스는 직장인, 학생, 혼밥족들의 메뉴 선택 스트레스를 완화하기 위해 제작된 음식 랜덤 추천 도구입니다.</p>
-        
-        <h2>스마트 메뉴 추천 활용 가이드</h2>
+    <!-- 구글 승인을 위한 풍부한 가치 창출 텍스트 문서 영역 -->
+    <article class="content-section">
+        <h2>매일 반복되는 '오늘 뭐 먹지?' 결정 장애의 원인과 해결책</h2>
+        <p>현대 직장인과 학생들의 일상에서 가장 자주 발생하는 소소한 스트레스 중 하나는 단연 '메뉴 선택'입니다. 심리학에서는 수많은 선택지 앞에서 오히려 결정 능력이 마비되는 현상을 **'선택의 역설(Paradox of Choice)'** 또는 **'결정 피로(Decision Fatigue)'**라고 부릅니다. 매일 점심과 저녁마다 반복되는 이 피로감을 줄이기 위해 만들어진 스마트 무작위 메뉴 추천 서비스를 즐겨보세요.</p>
+
+        <h2>영양 균형을 위한 식단 카테고리별 특징 가이드</h2>
+        <p>건강한 식생활을 지속하기 위해서는 매일 단일 종류의 음식에 치우치지 않고 탄수화물, 단백질, 지방 및 미네랄을 균형 있게 섭취하는 것이 무엇보다 중요합니다.</p>
         <ul>
-            <li><strong>카테고리 선택:</strong> 한식, 일식, 중식, 양식, 분식, 디저트 중 원하시는 종류를 선택하세요.</li>
-            <li><strong>원클릭 추천:</strong> '추천해줘!' 버튼을 누르면 슬롯머신이 작동하여 오늘의 메뉴를 선정합니다.</li>
-            <li><strong>최근 기록 활용:</strong> 하단의 최근 선택 기록을 통해 직전 식사와 중복되지 않도록 균형 잡힌 식단을 구성해 보세요.</li>
+            <li><strong>한식 (Korean Food):</strong> 발효 식품인 김치, 된장 등과 함께 다양한 채소 반찬이 어우러져 식이섬유와 유산균 섭취에 뛰어납니다.</li>
+            <li><strong>일식 (Japanese Food):</strong> 신선한 해산물과 담백한 소스를 주로 사용하여 고단백 저지방 식단을 선호하는 분들에게 최적입니다.</li>
+            <li><strong>중식 & 양식 (Chinese & Western):</strong> 풍부한 풍미와 높은 열량을 자랑하므로, 식사 후 가벼운 산책을 곁들이면 건강관리에 도움이 됩니다.</li>
+            <li><strong>분식 (Snack Food):</strong> 빠른 식사가 가능하지만 탄수화물 비중이 높으므로 달걀이나 어묵 등의 단백질류를 함께 조합하는 것을 추천합니다.</li>
+            <li><strong>디저트 (Dessert):</strong> 식사 후 기분 전환과 당분 보충을 도와주며, 아메리카노나 차(Tea) 종류와 결합하면 깔끔한 마무리가 가능합니다.</li>
         </ul>
+
+        <h2>스마트 메뉴 추천 슬롯머신 200% 활용하기</h2>
+        <p>본 서비스는 사용자의 기분이나 선호도에 맞춰 자유롭게 범위를 조절할 수 있습니다. 예를 들어, 자극적이지 않은 음식이 당기는 날에는 '한식' 또는 '일식' 카테고리를 먼저 선택한 후 슬롯을 돌려보세요. 또한 하단의 **'최근 먹은 기록'** 기능을 활용하면 직전 식사와 중복되는 메뉴를 피하고 일주일 동안의 식단 다양성을 쉽게 유지할 수 있습니다.</p>
     </article>
 
-    <!-- 푸터 영역 -->
     <footer>
         <div class="footer-links">
             <button class="link-footer" onclick="openModal('privacyModal')">개인정보처리방침</button>
@@ -565,48 +318,36 @@
         <p>© 2026 What Should I Eat Today. All rights reserved.</p>
     </footer>
 
-    <!-- 제휴 문의 모달 -->
+    <!-- 모달 레이아웃 -->
     <div id="contactModal" class="modal" onclick="handleModalClick(event, 'contactModal')">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="modal-title" id="modalTitle">제휴 및 문의</span>
+                <h3 style="background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">제휴 및 문의</h3>
                 <button class="btn-close" onclick="closeModal('contactModal')">&times;</button>
             </div>
             <form id="contactForm" onsubmit="submitForm(event)">
-                <div class="form-group">
-                    <label id="labelCompany" for="company">회사명 / 이름</label>
-                    <input type="text" id="company" name="company" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label id="labelEmail" for="email">이메일 주소</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label id="labelPhone" for="phone">연락처 (선택)</label>
-                    <input type="tel" id="phone" name="phone" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label id="labelMessage" for="message">문의 내용</label>
-                    <textarea id="message" name="message" class="form-control" required></textarea>
-                </div>
+                <div class="form-group"><label id="labelCompany">회사명 / 이름</label><input type="text" id="company" name="company" class="form-control" required></div>
+                <div class="form-group"><label id="labelEmail">이메일 주소</label><input type="email" id="email" name="email" class="form-control" required></div>
+                <div class="form-group"><label id="labelPhone">연락처 (선택)</label><input type="tel" id="phone" name="phone" class="form-control"></div>
+                <div class="form-group"><label id="labelMessage">문의 내용</label><textarea id="message" name="message" class="form-control" rows="4" required></textarea></div>
                 <button type="submit" id="btnSubmit" class="btn-submit">보내기</button>
             </form>
         </div>
     </div>
 
-    <!-- 개인정보처리방침 모달 (애드센스 필수 요구사항) -->
+    <!-- 개인정보처리방침 모달 (애드센스 통과 필수 요구사항) -->
     <div id="privacyModal" class="modal" onclick="handleModalClick(event, 'privacyModal')">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="modal-title">개인정보처리방침</span>
+                <h3>개인정보처리방침</h3>
                 <button class="btn-close" onclick="closeModal('privacyModal')">&times;</button>
             </div>
-            <div style="font-size: 13px; color: var(--text-secondary);">
-                <p style="margin-bottom: 10px;">본 웹사이트는 이용자의 개인정보보호를 매우 중요시하며, 관련 법령을 준수합니다.</p>
-                <h4 style="color: var(--text-primary); margin: 10px 0 5px;">1. 수집하는 개인정보 항목</h4>
-                <p style="margin-bottom: 10px;">서비스 이용 과정에서 브라우저 로컬 스토리지에 테마, 언어 설정, 최근 메뉴 추천 기록이 저장될 수 있습니다.</p>
-                <h4 style="color: var(--text-primary); margin: 10px 0 5px;">2. 쿠키 및 광고 서비스</h4>
-                <p style="margin-bottom: 10px;">본 사이트는 타사 광고 공급업체(Google 등)를 사용하여 맞춤형 광고를 제공합니다. Google은 쿠키를 사용하여 이용자의 본 사이트 방문 기록을 바탕으로 광고를 제공합니다.</p>
+            <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                <p style="margin-bottom: 10px;">본 웹사이트는 이용자의 개인정보보호를 중요시하며 관련 법령을 준수합니다.</p>
+                <h4 style="color: var(--text-primary); margin: 10px 0 4px;">1. 개인정보 처리 목적 및 항목</h4>
+                <p style="margin-bottom: 10px;">본 사이트는 로컬 스토리지(Local Storage)를 사용하여 이용자의 테마 설정, 언어 선택, 최근 식사 기록 정보를 보관하며, 외부에 전송하지 않습니다.</p>
+                <h4 style="color: var(--text-primary); margin: 10px 0 4px;">2. 타사 광고 제공 및 쿠키 사용</h4>
+                <p>본 사이트는 Google을 비롯한 타사 광고 제공업체를 통해 맞춤형 광고를 제공합니다. Google은 DART 쿠키를 활용하여 이용자의 사이트 방문 기록을 기반으로 유용한 광고를 제공할 수 있습니다.</p>
             </div>
         </div>
     </div>
@@ -615,12 +356,13 @@
     <div id="termsModal" class="modal" onclick="handleModalClick(event, 'termsModal')">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="modal-title">이용약관</span>
+                <h3>이용약관</h3>
                 <button class="btn-close" onclick="closeModal('termsModal')">&times;</button>
             </div>
-            <div style="font-size: 13px; color: var(--text-secondary);">
-                <p style="margin-bottom: 10px;">본 사이트에서 제공하는 메뉴 추천 정보는 참고용 서비스이며, 사용자의 선택에 대한 법적 책임을 지지 않습니다.</p>
-                <p>사이트 내의 콘텐츠와 디자인은 무단 복제를 금지합니다.</p>
+            <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                <p style="margin-bottom: 10px;">본 약관은 '오늘 뭐 먹지?' 서비스 이용 조건을 규정합니다.</p>
+                <p style="margin-bottom: 10px;">1. 제공되는 음식 정보 및 칼로리 가이드는 일반적인 참고 자료이며, 실제 제공업체에 따라 차이가 있을 수 있습니다.</p>
+                <p>2. 사이트 내 모든 무단 전재, 디자인 복제 및 배포를 금지합니다.</p>
             </div>
         </div>
     </div>
@@ -628,79 +370,62 @@
     <script>
         const i18n = {
             ko: {
-                title: "오늘 뭐 먹지?",
-                subtitle: "결정 장애 탈출! 오늘 당신의 운명 메뉴는?",
-                recommend: "추천해줘!",
-                historyTitle: "최근 먹은 기록",
-                clear: "지우기",
-                noHistory: "아직 기록이 없어요.",
-                ready: "준비됐나요?",
-                categories: {
-                    all: "전체", korean: "한식", japanese: "일식", chinese: "중식", western: "양식", snack: "분식", dessert: "디저트"
-                },
-                contactLink: "제휴 및 문의",
-                contactTitle: "제휴 및 문의",
-                labelCompany: "회사명 / 이름",
-                placeholderCompany: "회사명 또는 이름을 입력해주세요",
-                labelEmail: "이메일 주소",
-                placeholderEmail: "example@email.com",
-                labelPhone: "연락처 (선택)",
-                placeholderPhone: "연락처를 입력해주세요",
-                labelMessage: "문의 내용",
-                placeholderMessage: "문의 내용을 입력해주세요",
-                btnSend: "보내기",
-                sending: "전송 중...",
-                sendSuccess: "문의가 성공적으로 전송되었습니다. 감사합니다!",
-                sendError: "전송에 실패했습니다. 다시 시도해주세요."
+                title: "오늘 뭐 먹지?", subtitle: "결정 장애 탈출! 오늘 당신의 운명 메뉴는?",
+                recommend: "추천해줘!", historyTitle: "최근 먹은 기록", clear: "지우기", noHistory: "아직 기록이 없어요.", ready: "Ready?",
+                categories: { all: "전체", korean: "한식", japanese: "일식", chinese: "중식", western: "양식", snack: "분식", dessert: "디저트" },
+                contactLink: "제휴 및 문의", contactTitle: "제휴 및 문의",
+                labelCompany: "회사명 / 이름", placeholderCompany: "회사명 또는 이름을 입력해주세요",
+                labelEmail: "이메일 주소", placeholderEmail: "example@email.com",
+                labelPhone: "연락처 (선택)", placeholderPhone: "연락처를 입력해주세요",
+                labelMessage: "문의 내용", placeholderMessage: "문의 내용을 입력해주세요",
+                btnSend: "보내기", sending: "전송 중...",
+                sendSuccess: "문의가 성공적으로 전송되었습니다. 감사합니다!", sendError: "전송에 실패했습니다. 다시 시도해주세요."
             },
             en: {
-                title: "What to Eat?",
-                subtitle: "No more worries! What's your destiny meal today?",
-                recommend: "Recommend Me!",
-                historyTitle: "Recent History",
-                clear: "Clear",
-                noHistory: "No history yet.",
-                ready: "Ready?",
-                categories: {
-                    all: "All", korean: "Korean", japanese: "Japanese", chinese: "Chinese", western: "Western", snack: "Snack", dessert: "Dessert"
-                },
-                contactLink: "Partnership / Contact Us",
-                contactTitle: "Partnership & Inquiry",
-                labelCompany: "Company / Name",
-                placeholderCompany: "Enter company name or your name",
-                labelEmail: "Email Address",
-                placeholderEmail: "example@email.com",
-                labelPhone: "Contact Number (Optional)",
-                placeholderPhone: "Phone number",
-                labelMessage: "Inquiry Content",
-                placeholderMessage: "Enter your inquiry content",
-                btnSend: "Submit",
-                sending: "Sending...",
-                sendSuccess: "Your inquiry has been sent successfully. Thank you!",
-                sendError: "Failed to send. Please try again."
+                title: "What to Eat?", subtitle: "No more worries! What's your destiny meal today?",
+                recommend: "Recommend Me!", historyTitle: "Recent History", clear: "Clear", noHistory: "No history yet.", ready: "Ready?",
+                categories: { all: "All", korean: "Korean", japanese: "Japanese", chinese: "Chinese", western: "Western", snack: "Snack", dessert: "Dessert" },
+                contactLink: "Partnership / Contact Us", contactTitle: "Partnership & Inquiry",
+                labelCompany: "Company / Name", placeholderCompany: "Enter company name or your name",
+                labelEmail: "Email Address", placeholderEmail: "example@email.com",
+                labelPhone: "Contact Number (Optional)", placeholderPhone: "Phone number",
+                labelMessage: "Inquiry Content", placeholderMessage: "Enter your inquiry content",
+                btnSend: "Submit", sending: "Sending...",
+                sendSuccess: "Your inquiry has been sent successfully. Thank you!", sendError: "Failed to send. Please try again."
             }
         };
 
+        /* 24가지 메뉴와 풍부한 가이드 DB 내장 (텍스트 밀도 극대화) */
         const menuData = [
-            { nameEn: "Kimchi Stew", nameKo: "김치찌개", category: "korean", keyword: "kimchi,stew" },
-            { nameEn: "Bibimbap", nameKo: "비빔밥", category: "korean", keyword: "bibimbap" },
-            { nameEn: "Bulgogi", nameKo: "불고기", category: "korean", keyword: "bulgogi" },
-            { nameEn: "Sushi", nameKo: "초밥", category: "japanese", keyword: "sushi" },
-            { nameEn: "Ramen", nameKo: "라멘", category: "japanese", keyword: "ramen" },
-            { nameEn: "Tonkatsu", nameKo: "돈가스", category: "japanese", keyword: "cutlet" },
-            { nameEn: "Tteokbokki", nameKo: "떡볶이", category: "snack", keyword: "tteokbokki" },
-            { nameEn: "Jajangmyeon", nameKo: "짜장면", category: "chinese", keyword: "black-bean-noodles" },
-            { nameEn: "Pasta", nameKo: "파스타", category: "western", keyword: "pasta" },
-            { nameEn: "Pizza", nameKo: "피자", category: "western", keyword: "pizza" },
-            { nameEn: "Burger", nameKo: "햄버거", category: "western", keyword: "burger" },
-            { nameEn: "Steak", nameKo: "스테이크", category: "western", keyword: "steak" },
-            { nameEn: "Waffle", nameKo: "와플", category: "dessert", keyword: "waffle" },
-            { nameEn: "Cake", nameKo: "조각케이크", category: "dessert", keyword: "cake" }
+            { nameEn: "Kimchi Stew", nameKo: "김치찌개", category: "korean", keyword: "kimchi,stew", desc: "한국인의 대표 영혼의 음식이자 힐링 푸드. 얼큰한 국물과 유산균이 풍부하여 스트레스 해소에 좋습니다.", cal: "약 450kcal", pair: "계란말이, 김가루, 공기밥" },
+            { nameEn: "Bibimbap", nameKo: "비빔밥", category: "korean", keyword: "bibimbap", desc: "각종 신선한 나물과 고추장의 완벽한 조화. 식이섬유와 비타민이 풍부하여 영양 균형을 맞추기 좋습니다.", cal: "약 550kcal", pair: "된장국, 계란후라이" },
+            { nameEn: "Bulgogi", nameKo: "불고기", category: "korean", keyword: "bulgogi", desc: "단짠 양념에 부드럽게 재운 소고기 요리. 남녀노소 누구나 즐기는 호불호 없는 한식 고기 메뉴입니다.", cal: "약 600kcal", pair: "상추 쌈, 쌈장" },
+            { nameEn: "Doenjang Stew", nameKo: "된장찌개", category: "korean", keyword: "stew", desc: "구수한 된장 육수와 두부, 애호박의 조화. 속을 편안하게 해주는 대표적인 데일리 건강식입니다.", cal: "약 350kcal", pair: "제육볶음, 생선구이" },
+            { nameEn: "Samgyeopsal", nameKo: "삼겹살", category: "korean", keyword: "pork", desc: "고소하고 풍부한 육즙을 자랑하는 돼지고기 구이. 파채와 마늘을 곁들이면 풍미가 배가됩니다.", cal: "약 750kcal", pair: "파절임, 구운 김치, 냉면" },
+            { nameEn: "Sushi", nameKo: "초밥", category: "japanese", keyword: "sushi", desc: "신선한 회와 단초밥의 정갈한 결합. 고단백 저지방 식단으로 깔끔한 식사에 제격입니다.", cal: "약 450~600kcal", pair: "미소시루, 우동" },
+            { nameEn: "Ramen", nameKo: "라멘", category: "japanese", keyword: "ramen", desc: "진하게 우려낸 육수와 쫄깃한 면발. 비 오거나 쌀쌀한 날 속을 든든하게 채워주는 일식 면요리입니다.", cal: "약 650~850kcal", pair: "차슈 추가, 아지타마고, 공기밥" },
+            { nameEn: "Tonkatsu", nameKo: "돈가스", category: "japanese", keyword: "cutlet", desc: "바삭한 튀김옷 속에 촉촉한 고기가 가득한 요리. 겉바속촉의 식감을 완성한 인기의 메뉴입니다.", cal: "약 700kcal", pair: "양배추 샐러드, 우동" },
+            { nameEn: "Udon", nameKo: "우동", category: "japanese", keyword: "udon", desc: "오동통한 면발과 담백한 가쓰오부시 국물. 부담 없이 속을 따뜻하게 달래주기에 적합합니다.", cal: "약 400kcal", pair: "모듬 튀김, 유부초밥" },
+            { nameEn: "Jajangmyeon", nameKo: "짜장면", category: "chinese", keyword: "black-bean-noodles", desc: "춘장을 고소하게 볶아낸 대표 중화요리. 달콤함과 감칠맛이 어우러져 남녀노소 사랑받습니다.", cal: "약 700kcal", pair: "단무지, 탕수육, 군만두" },
+            { nameEn: "Jjamppong", nameKo: "짬뽕", category: "chinese", keyword: "noodle,soup", desc: "해산물과 야채를 불맛으로 볶아낸 얼큰한 국물 요리. 스트레스가 쌓였을 때 속 시원한 해장에 좋습니다.", cal: "약 680kcal", pair: "군만두, 탕수육" },
+            { nameEn: "Tangsuyuk", nameKo: "탕수육", category: "chinese", keyword: "pork", desc: "바삭하게 튀겨낸 고기와 새콤달콤한 소스. 중식 식사 시 빠질 수 없는 최고의 요리입니다.", cal: "약 650kcal", pair: "짜장면, 짬뽕" },
+            { nameEn: "Pasta", nameKo: "파스타", category: "western", keyword: "pasta", desc: "토마토, 크림, 오일 등 취향에 따라 소스를 선택하는 고급스러운 이탈리안 면요리입니다.", cal: "약 500~750kcal", pair: "수제 피클, 마늘빵, 에이드" },
+            { nameEn: "Pizza", nameKo: "피자", category: "western", keyword: "pizza", desc: "풍부한 치즈와 고소한 토핑의 조화. 여럿이 함께 즐기기 좋은 대표적인 서양식 파티 메뉴입니다.", cal: "약 800kcal (2조각)", pair: "핫소스, 피클, 콜라" },
+            { nameEn: "Burger", nameKo: "햄버거", category: "western", keyword: "burger", desc: "육즙 가득한 패티와 신선한 야채가 조화를 이루는 단백질 및 탄수화물의 일체형 빠른 한 끼 식사입니다.", cal: "약 550~750kcal", pair: "감자튀김, 탄산음료" },
+            { nameEn: "Steak", nameKo: "스테이크", category: "western", keyword: "steak", desc: "두툼한 소고기를 그릴에 구워낸 고품격 요리. 기념일이나 특별한 날 기분 전환 식사로 근사합니다.", cal: "약 600~800kcal", pair: "구운 야채, 와인, 매쉬드 포테이토" },
+            { nameEn: "Tteokbokki", nameKo: "떡볶이", category: "snack", keyword: "tteokbokki", desc: "매콤달콤한 소스에 쫀득한 떡이 들어간 국민 간식. 스트레스를 싹 날려주는 힐링 분식입니다.", cal: "약 450kcal", pair: "모듬 튀김, 찰순대, 쿨피스" },
+            { nameEn: "Gimbap", nameKo: "김밥", category: "snack", keyword: "gimbap", desc: "다양한 재료를 김과 밥에 말아낸 완벽한 단짠 조화. 바쁜 일상에서 간편하고 균형 있게 먹기 좋습니다.", cal: "약 400kcal", pair: "라면, 떡볶이 국물" },
+            { nameEn: "Sundae", nameKo: "순대", category: "snack", keyword: "sundae", desc: "고소하고 찰진 당면과 내장의 풍미. 소금이나 초장에 찍어 먹으면 간식 및 안주로 제격입니다.", cal: "약 350kcal", pair: "떡볶이, 튀김" },
+            { nameEn: "Waffle", nameKo: "와플", category: "dessert", keyword: "waffle", desc: "겉은 바삭하고 속은 촉촉한 디저트. 크림이나 과일, 아이스크림을 올리면 당충전에 최고입니다.", cal: "약 350~500kcal", pair: "아메리카노, 홍차" },
+            { nameEn: "Cake", nameKo: "조각케이크", category: "dessert", keyword: "cake", desc: "부드러운 시트와 달콤한 크림의 환상적 만남. 기분 전환이 필요할 때 디저트로 완벽합니다.", cal: "약 300~450kcal", pair: "카페라떼, 드립커피" },
+            { nameEn: "Ice Cream", nameKo: "아이스크림", category: "dessert", keyword: "icecream", desc: "입안에서 부드럽게 녹아내리는 시원함. 식사 후 입가심을 위한 간편한 디저트입니다.", cal: "약 200~300kcal", pair: "에스프레소 (아포가토)" },
+            { nameEn: "Donuts", nameKo: "도넛", category: "dessert", keyword: "donut", desc: "폭신한 빵에 달콤한 글레이즈나 크림이 들어간 기분 좋은 식후 간식입니다.", cal: "약 250~400kcal", pair: "블랙 커피, 우유" },
+            { nameEn: "Bingsu", nameKo: "팥빙수", category: "dessert", keyword: "bingsu", desc: "고소한 팥과 시원한 얼음의 조화. 여름철 열기를 시원하게 날려주는 전통 대표 디저트입니다.", cal: "약 400~600kcal", pair: "연유, 떡 토핑" }
         ];
 
         let currentLang = localStorage.getItem('lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
         let currentCategory = "all";
-        const HISTORY_KEY = 'food_history_v4';
+        const HISTORY_KEY = 'food_history_v6';
 
         const updateUI = () => {
             const text = i18n[currentLang];
@@ -711,7 +436,6 @@
             document.getElementById('btnClear').innerText = text.clear;
             document.getElementById('slotContent').innerText = text.ready;
             
-            document.getElementById('modalTitle').innerText = text.contactTitle;
             document.getElementById('labelCompany').innerText = text.labelCompany;
             document.getElementById('company').placeholder = text.placeholderCompany;
             document.getElementById('labelEmail').innerText = text.labelEmail;
@@ -745,15 +469,15 @@
                 osc.connect(gain); gain.connect(ctx.destination);
                 if (type === 'tick') {
                     osc.frequency.setValueAtTime(440, ctx.currentTime);
-                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
-                    osc.start(); osc.stop(ctx.currentTime + 0.05);
+                    gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.04);
+                    osc.start(); osc.stop(ctx.currentTime + 0.04);
                 } else if (type === 'win') {
                     osc.frequency.setValueAtTime(523.25, ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.2);
-                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-                    osc.start(); osc.stop(ctx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+                    osc.start(); osc.stop(ctx.currentTime + 0.25);
                 }
             } catch (e) {}
         };
@@ -782,7 +506,7 @@
             const now = new Date();
             const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
             history.unshift({ ...menu, time, imgUrl });
-            if (history.length > 10) history.pop();
+            if (history.length > 8) history.pop();
             localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
             loadHistory();
         };
@@ -796,10 +520,12 @@
             const btn = document.getElementById('btnRecommend');
             const slot = document.getElementById('slotContent');
             const img = document.getElementById('foodImage');
+            const card = document.getElementById('foodDetailCard');
             const filtered = currentCategory === "all" ? menuData : menuData.filter(m => m.category === currentCategory);
             
             btn.disabled = true;
             img.classList.remove('show');
+            card.classList.remove('show');
             
             let count = 0;
             const maxTicks = 12;
@@ -812,18 +538,26 @@
                     clearInterval(interval);
                     const finalMenu = filtered[Math.floor(Math.random() * filtered.length)];
                     slot.innerText = currentLang === 'ko' ? finalMenu.nameKo : finalMenu.nameEn;
-                    slot.style.transform = 'scale(1.2)';
+                    slot.style.transform = 'scale(1.15)';
                     
                     const imgUrl = `https://loremflickr.com/400/300/food,${finalMenu.keyword}`;
                     img.src = imgUrl;
                     img.onload = () => img.classList.add('show');
                     
+                    // 음식 가이드 정보 카드 출력
+                    document.getElementById('detailTitle').innerText = currentLang === 'ko' ? finalMenu.nameKo : finalMenu.nameEn;
+                    document.getElementById('detailCategory').innerText = i18n[currentLang].categories[finalMenu.category];
+                    document.getElementById('detailDesc').innerText = finalMenu.desc;
+                    document.getElementById('detailCalorie').innerText = finalMenu.cal;
+                    document.getElementById('detailPairing').innerText = finalMenu.pair;
+                    card.classList.add('show');
+
                     setTimeout(() => slot.style.transform = 'scale(1)', 200);
                     playSound('win');
                     saveHistory(finalMenu, imgUrl);
                     btn.disabled = false;
                 }
-            }, 150);
+            }, 130);
         };
 
         const toggleLang = () => {
