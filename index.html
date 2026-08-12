@@ -3,26 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>심플 로또 번호 생성기</title>
+    <title>오늘 뭐 먹지? | 최고의 메뉴 추천 서비스</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
     <style>
         :root {
-            --bg-color: #f1f5f9;
+            --bg-color: #fffaf5;
             --card-bg: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --border-color: #e2e8f0;
-            
-            /* 로또 공 색상 */
-            --ball-yellow: radial-gradient(circle at 30% 30%, #fef08a 0%, #facc15 50%, #ca8a04 100%);
-            --ball-blue: radial-gradient(circle at 30% 30%, #bfdbfe 0%, #3b82f6 50%, #1d4ed8 100%);
-            --ball-red: radial-gradient(circle at 30% 30%, #fecaca 0%, #ef4444 50%, #b91c1c 100%);
-            --ball-gray: radial-gradient(circle at 30% 30%, #e2e8f0 0%, #94a3b8 50%, #475569 100%);
-            --ball-green: radial-gradient(circle at 30% 30%, #bbf7d0 0%, #22c55e 50%, #15803d 100%);
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --primary-color: #ff6b6b;
+            --primary-hover: #ee5253;
+            --accent-color: #ff9f43;
+            --border-color: #ffeaa7;
+            --selector-bg: #fff5e6;
+            --select-btn-bg: #ffffff;
+            --slot-bg: #2d3436;
+            --slot-text: #fab1a0;
+        }
+
+        html[data-theme="dark"] {
+            --bg-color: #1e272e;
+            --card-bg: #2f3640;
+            --text-primary: #f5f6fa;
+            --text-secondary: #dcdde1;
+            --border-color: #576574;
+            --selector-bg: #1e272e;
+            --select-btn-bg: #2f3640;
+            --slot-bg: #000000;
         }
 
         * {
@@ -41,193 +56,177 @@
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .container {
+            position: relative;
             width: 100%;
-            max-width: 520px;
+            max-width: 480px;
             background: var(--card-bg);
-            border-radius: 24px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.1);
+            padding: 40px 24px;
             text-align: center;
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn-theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+
+        .btn-theme-toggle:hover {
+            background-color: var(--selector-bg);
+            transform: scale(1.1);
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 900;
             margin-bottom: 8px;
-            background: linear-gradient(135deg, #4f46e5, #818cf8);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-secondary);
-            margin-bottom: 40px;
-        }
-
-        /* 로또 공 영역 */
-        .balls-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
             margin-bottom: 30px;
-            min-height: 72px;
         }
 
-        .balls-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            padding: 0 10px;
-        }
-
-        /* 생성 수량 선택기 */
-        .selector-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        /* 슬롯머신 스타일 */
+        .slot-machine {
+            background: var(--slot-bg);
+            height: 120px;
+            border-radius: 20px;
             margin-bottom: 30px;
-            background: #f8fafc;
-            padding: 10px 20px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-        }
-
-        .selector-label {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .selector-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-select {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            width: 38px;
-            height: 34px;
-            font-size: 14px;
-            font-weight: 700;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            border: 4px solid var(--accent-color);
         }
 
-        .btn-select:hover {
+        .slot-content {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--slot-text);
+            text-shadow: 0 0 10px rgba(250, 177, 160, 0.5);
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .slot-label {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* 카테고리 선택 */
+        .category-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .btn-category {
+            background: var(--select-btn-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-category:hover {
             border-color: var(--primary-color);
             color: var(--primary-color);
         }
 
-        .btn-select.active {
+        .btn-category.active {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
             color: #ffffff;
-            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
         }
 
-        .ball-placeholder {
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            border: 2px dashed var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #cbd5e1;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .ball {
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 20px;
-            font-weight: 900;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), inset 0 -4px 6px rgba(0, 0, 0, 0.1);
-            transform: scale(0);
-            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        @keyframes popIn {
-            to {
-                transform: scale(1);
-            }
-        }
-
-        /* 번호 대역별 배경색 클래스 */
-        .ball-num-1 { background: var(--ball-yellow); }
-        .ball-num-2 { background: var(--ball-blue); }
-        .ball-num-3 { background: var(--ball-red); }
-        .ball-num-4 { background: var(--ball-gray); }
-        .ball-num-5 { background: var(--ball-green); }
-
-        /* 컨트롤 버튼 */
-        .btn-generate {
+        /* 메인 버튼 */
+        .btn-recommend {
             width: 100%;
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             color: #ffffff;
             border: none;
-            padding: 16px 24px;
-            font-size: 18px;
-            font-weight: 700;
-            border-radius: 14px;
+            padding: 18px;
+            font-size: 20px;
+            font-weight: 900;
+            border-radius: 18px;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
-            outline: none;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
         }
 
-        .btn-generate:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+        .btn-recommend:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 107, 107, 0.4);
         }
 
-        .btn-generate:active {
+        .btn-recommend:active {
             transform: translateY(0);
-            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
         }
 
-        /* 생성 이력 영역 */
+        .btn-recommend:disabled {
+            filter: grayscale(1);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 기록 영역 */
         .history-section {
             margin-top: 40px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 30px;
-            text-align: left;
+            padding-top: 25px;
+            border-top: 2px dashed var(--border-color);
         }
 
         .history-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 15px;
         }
 
         .history-title {
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 900;
             color: var(--text-primary);
         }
 
-        .btn-clear-history {
+        .btn-clear {
             background: none;
             border: none;
             color: var(--text-secondary);
@@ -236,39 +235,42 @@
             text-decoration: underline;
         }
 
-        .btn-clear-history:hover {
-            color: #ef4444;
-        }
-
         .history-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-height: 220px;
+            gap: 10px;
+            max-height: 200px;
             overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        /* 스크롤바 커스텀 */
-        .history-list::-webkit-scrollbar {
-            width: 4px;
-        }
-        .history-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .history-list::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
+            padding-right: 5px;
         }
 
         .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #f8fafc;
-            padding: 10px 16px;
-            border-radius: 12px;
-            border: 1px solid #f1f5f9;
+            background: var(--selector-bg);
+            padding: 12px 18px;
+            border-radius: 15px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .history-menu {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .history-tag {
+            font-size: 10px;
+            background: var(--accent-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 8px;
         }
 
         .history-time {
@@ -276,301 +278,189 @@
             color: var(--text-secondary);
         }
 
-        .history-balls {
-            display: flex;
-            gap: 6px;
-        }
-
-        .history-ball {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 900;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
         .no-history {
-            text-align: center;
             color: var(--text-secondary);
-            font-size: 13px;
-            padding: 20px 0;
+            font-size: 14px;
+            padding: 20px;
         }
 
-        /* 반응형 대응 */
+        /* 스크롤바 */
+        .history-list::-webkit-scrollbar { width: 5px; }
+        .history-list::-webkit-scrollbar-track { background: transparent; }
+        .history-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+
         @media (max-width: 480px) {
-            .container {
-                padding: 30px 18px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-            .balls-container {
-                gap: 12px;
-            }
-            .balls-row {
-                gap: 6px;
-                justify-content: center;
-            }
-            .ball, .ball-placeholder {
-                width: 44px;
-                height: 44px;
-                font-size: 16px;
-            }
-            .history-ball {
-                width: 24px;
-                height: 24px;
-                font-size: 10px;
-            }
-            .history-time {
-                font-size: 10px;
-            }
-            .selector-container {
-                padding: 8px 14px;
-                margin-bottom: 20px;
-            }
-            .btn-select {
-                width: 32px;
-                height: 30px;
-                font-size: 12px;
-                border-radius: 8px;
-            }
+            .container { padding: 30px 20px; }
+            h1 { font-size: 26px; }
+            .slot-content { font-size: 28px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>로또 번호 생성기</h1>
-        <div class="subtitle">버튼을 누르면 행운의 번호 6개가 생성됩니다.</div>
+        <button id="themeToggle" class="btn-theme-toggle" onclick="toggleTheme()">🌙</button>
+        <h1>오늘 뭐 먹지?</h1>
+        <p class="subtitle">결정 장애 탈출! 오늘 당신의 운명 메뉴는?</p>
 
-        <!-- 생성 게임 수 선택 -->
-        <div class="selector-container">
-            <span class="selector-label">생성 게임 수</span>
-            <div class="selector-buttons">
-                <button class="btn-select active" data-value="1">1</button>
-                <button class="btn-select" data-value="2">2</button>
-                <button class="btn-select" data-value="3">3</button>
-                <button class="btn-select" data-value="4">4</button>
-                <button class="btn-select" data-value="5">5</button>
-            </div>
+        <div class="category-container" id="categoryContainer">
+            <button class="btn-category active" data-category="전체">전체</button>
+            <button class="btn-category" data-category="한식">한식</button>
+            <button class="btn-category" data-category="일식">일식</button>
+            <button class="btn-category" data-category="중식">중식</button>
+            <button class="btn-category" data-category="양식">양식</button>
+            <button class="btn-category" data-category="분식">분식</button>
+            <button class="btn-category" data-category="디저트">디저트</button>
         </div>
 
-        <!-- 로또 공 표시 구역 -->
-        <div class="balls-container" id="ballsContainer">
-            <div class="balls-row">
-                <div class="ball-placeholder">?</div>
-                <div class="ball-placeholder">?</div>
-                <div class="ball-placeholder">?</div>
-                <div class="ball-placeholder">?</div>
-                <div class="ball-placeholder">?</div>
-                <div class="ball-placeholder">?</div>
-            </div>
+        <div class="slot-machine">
+            <span class="slot-label">Menu Slot</span>
+            <div class="slot-content" id="slotContent">Ready?</div>
         </div>
 
-        <button class="btn-generate" id="btnGenerate" onclick="generateLottoNumbers()">번호 생성하기</button>
+        <button class="btn-recommend" id="btnRecommend" onclick="startRecommendation()">추천해줘!</button>
 
-        <!-- 이전 생성 내역 -->
         <div class="history-section">
             <div class="history-header">
-                <span class="history-title">최근 생성 기록</span>
-                <button class="btn-clear-history" onclick="clearHistory()">기록 지우기</button>
+                <span class="history-title">최근 먹은 기록</span>
+                <button class="btn-clear" onclick="clearHistory()">지우기</button>
             </div>
             <div class="history-list" id="historyList">
-                <!-- 기록 동적 추가 영역 -->
+                <div class="no-history">아직 기록이 없어요.</div>
             </div>
         </div>
     </div>
 
     <script>
-        // Web Audio API를 활용한 효과음 발생 함수
-        function playPopSound(index) {
+        const menuData = [
+            { name: "김치찌개", category: "한식" }, { name: "된장찌개", category: "한식" },
+            { name: "불고기", category: "한식" }, { name: "비빔밥", category: "한식" },
+            { name: "제육볶음", category: "한식" }, { name: "삼겹살", category: "한식" },
+            { name: "초밥", category: "일식" }, { name: "라멘", category: "일식" },
+            { name: "돈가스", category: "일식" }, { name: "규동", category: "일식" },
+            { name: "우동", category: "일식" }, { name: "소바", category: "일식" },
+            { name: "짜장면", category: "중식" }, { name: "짬뽕", category: "중식" },
+            { name: "탕수육", category: "중식" }, { name: "마라탕", category: "중식" },
+            { name: "볶음밥", category: "중식" }, { name: "딤섬", category: "중식" },
+            { name: "파스타", category: "양식" }, { name: "피자", category: "양식" },
+            { name: "스테이크", category: "양식" }, { name: "햄버거", category: "양식" },
+            { name: "리조또", category: "양식" }, { name: "샌드위치", category: "양식" },
+            { name: "떡볶이", category: "분식" }, { name: "김밥", category: "분식" },
+            { name: "라면", category: "분식" }, { name: "순대", category: "분식" },
+            { name: "튀김", category: "분식" }, { name: "쫄면", category: "분식" },
+            { name: "조각케이크", category: "디저트" }, { name: "와플", category: "디저트" },
+            { name: "마카롱", category: "디저트" }, { name: "빙수", category: "디저트" },
+            { name: "크로플", category: "디저트" }, { name: "도넛", category: "디저트" }
+        ];
+
+        let currentCategory = "전체";
+        const HISTORY_KEY = 'food_history';
+
+        // Sound Engine
+        const playSound = (type) => {
             try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                
-                const ctx = new AudioContext();
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
-                
                 osc.connect(gain);
                 gain.connect(ctx.destination);
-                
-                // 음의 주파수를 인덱스에 따라 다르게 하여 계단식 상승음 표현 (도레미파솔라...)
-                const frequencies = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00];
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(frequencies[index % frequencies.length], ctx.currentTime);
-                
-                gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                // 빠르게 음이 작아지는 효과 (통통 튀는 느낌)
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-                
-                osc.start();
-                osc.stop(ctx.currentTime + 0.15);
-            } catch (e) {
-                // 브라우저의 오디오 정책 등에 의해 차단되는 경우 예외처리
-                console.log('Audio Context error:', e);
-            }
-        }
 
-        // 로또 공 색상 스타일 구분을 위한 헬퍼 함수
-        function getBallClass(num) {
-            if (num <= 10) return 'ball-num-1'; // 1 ~ 10: 노랑
-            if (num <= 20) return 'ball-num-2'; // 11 ~ 20: 파랑
-            if (num <= 30) return 'ball-num-3'; // 21 ~ 30: 빨강
-            if (num <= 40) return 'ball-num-4'; // 31 ~ 40: 회색
-            return 'ball-num-5';                // 41 ~ 45: 초록
-        }
+                if (type === 'tick') {
+                    osc.frequency.setValueAtTime(440, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.05);
+                } else if (type === 'win') {
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                }
+            } catch (e) {}
+        };
 
-        // 로컬스토리지 관련 기능
-        const HISTORY_KEY = 'lotto_history';
-
-        function loadHistory() {
-            const historyList = document.getElementById('historyList');
+        const loadHistory = () => {
+            const list = document.getElementById('historyList');
             const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
-            
             if (history.length === 0) {
-                historyList.innerHTML = '<div class="no-history">최근 생성된 기록이 없습니다.</div>';
+                list.innerHTML = '<div class="no-history">아직 기록이 없어요.</div>';
                 return;
             }
-
-            historyList.innerHTML = history.map(item => {
-                const ballsHtml = item.numbers.map(num => `
-                    <div class="history-ball ${getBallClass(num)}">${num}</div>
-                `).join('');
-
-                return `
-                    <div class="history-item">
-                        <span class="history-time">${item.time}</span>
-                        <div class="history-balls">${ballsHtml}</div>
+            list.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <div>
+                        <span class="history-tag">${item.category}</span>
+                        <span class="history-menu">${item.name}</span>
                     </div>
-                `;
-            }).join('');
-        }
+                    <span class="history-time">${item.time}</span>
+                </div>
+            `).join('');
+        };
 
-        function saveToHistory(allGames) {
+        const saveHistory = (menu) => {
             const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
             const now = new Date();
-            const timeStr = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-            
-            // 새 기록 맨 앞에 추가
-            const newEntries = allGames.map(numbers => ({
-                time: timeStr,
-                numbers: numbers
-            }));
-
-            history.unshift(...newEntries);
-
-            // 최대 10개만 유지
-            if (history.length > 10) {
-                history.splice(10);
-            }
-
+            const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+            history.unshift({ ...menu, time });
+            if (history.length > 10) history.pop();
             localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
             loadHistory();
-        }
+        };
 
-        function clearHistory() {
+        const clearHistory = () => {
             localStorage.removeItem(HISTORY_KEY);
             loadHistory();
-        }
+        };
 
-        let currentGameCount = 1;
-
-        // 로또 공 영역 초기화 (자리표시자 설정)
-        function initBallsContainer() {
-            const container = document.getElementById('ballsContainer');
-            container.innerHTML = '';
-
-            for (let r = 0; r < currentGameCount; r++) {
-                const row = document.createElement('div');
-                row.className = 'balls-row';
-                for (let b = 0; b < 6; b++) {
-                    const placeholder = document.createElement('div');
-                    placeholder.className = 'ball-placeholder';
-                    placeholder.innerText = '?';
-                    row.appendChild(placeholder);
-                }
-                container.appendChild(row);
-            }
-        }
-
-        // 로또 번호 생성 코어 로직
-        function generateLottoNumbers() {
-            const btn = document.getElementById('btnGenerate');
-            if (btn.disabled) return; // 애니메이션 재생 중 중복 클릭 방지
+        const startRecommendation = () => {
+            const btn = document.getElementById('btnRecommend');
+            const slot = document.getElementById('slotContent');
+            const filtered = currentCategory === "전체" ? menuData : menuData.filter(m => m.category === currentCategory);
+            
             btn.disabled = true;
+            let count = 0;
+            const maxTicks = 20;
+            const interval = setInterval(() => {
+                const randomMenu = filtered[Math.floor(Math.random() * filtered.length)];
+                slot.innerText = randomMenu.name;
+                playSound('tick');
+                count++;
 
-            const container = document.getElementById('ballsContainer');
-            container.innerHTML = ''; // 초기화
-
-            // 각 행(게임)별로 번호 생성 및 정렬
-            const allSelected = [];
-            const rowElements = [];
-
-            for (let r = 0; r < currentGameCount; r++) {
-                // 행 엘리먼트 생성
-                const row = document.createElement('div');
-                row.className = 'balls-row';
-                container.appendChild(row);
-                rowElements.push(row);
-
-                // 1~45 중 중복 없이 6개 번호 추출
-                const pool = Array.from({ length: 45 }, (_, i) => i + 1);
-                const selected = [];
-                for (let i = 0; i < 6; i++) {
-                    const randomIndex = Math.floor(Math.random() * pool.length);
-                    selected.push(pool[randomIndex]);
-                    pool.splice(randomIndex, 1);
+                if (count >= maxTicks) {
+                    clearInterval(interval);
+                    const finalMenu = filtered[Math.floor(Math.random() * filtered.length)];
+                    slot.innerText = finalMenu.name;
+                    slot.style.transform = 'scale(1.2)';
+                    setTimeout(() => slot.style.transform = 'scale(1)', 200);
+                    playSound('win');
+                    saveHistory(finalMenu);
+                    btn.disabled = false;
                 }
-                selected.sort((a, b) => a - b);
-                allSelected.push(selected);
-            }
+            }, 100);
+        };
 
-            // 하나씩 순차적으로 나타나는 애니메이션 효과 (모든 행의 같은 열 공들이 동시에 나타남)
-            for (let b = 0; b < 6; b++) {
-                setTimeout(() => {
-                    for (let r = 0; r < currentGameCount; r++) {
-                        const num = allSelected[r][b];
-                        const ball = document.createElement('div');
-                        ball.className = `ball ${getBallClass(num)}`;
-                        ball.innerText = num;
-                        rowElements[r].appendChild(ball);
-                    }
-                    
-                    // 효과음 재생
-                    playPopSound(b);
+        const toggleTheme = () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            localStorage.setItem('theme', target);
+            document.getElementById('themeToggle').innerText = target === 'dark' ? '☀️' : '🌙';
+        };
 
-                    // 마지막 공까지 다 나왔을 때
-                    if (b === 5) {
-                        saveToHistory(allSelected);
-                        btn.disabled = false;
-                    }
-                }, b * 250); // 0.25초 간격으로 공 노출
-            }
-        }
-
-        // 페이지 초기 진입 시 기록 불러오기
-        window.onload = function() {
+        window.onload = () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.getElementById('themeToggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
             loadHistory();
-            initBallsContainer();
 
-            // 수량 선택 버튼 이벤트 바인딩
-            document.querySelectorAll('.btn-select').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const btnGenerate = document.getElementById('btnGenerate');
-                    if (btnGenerate.disabled) return; // 애니메이션 실행 중에는 변경 불가
-
-                    document.querySelectorAll('.btn-select').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentGameCount = parseInt(this.getAttribute('data-value'));
-                    initBallsContainer();
-                });
+            document.querySelectorAll('.btn-category').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.btn-category').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.dataset.category;
+                };
             });
         };
     </script>
