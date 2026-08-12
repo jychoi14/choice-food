@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>오늘 뭐 먹지? | What Should I Eat Today?</title>
+    <title>오늘 뭐 먹지? | 점심·저녁 메뉴 랜덤 추천 서비스</title>
+    <meta name="description" content="매일 반복되는 점심, 저녁 메뉴 고민 해결! 한식, 일식, 중식, 양식, 분식 등 카테고리별 스마트 랜덤 추천 슬롯머신으로 오늘 먹을 음식을 빠르게 정해보세요.">
+    <meta name="keywords" content="오늘뭐먹지, 메뉴추천, 점심메뉴추천, 저녁메뉴추천, 점심추천, 음식랜덤추천, 메뉴룰렛">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="오늘 뭐 먹지? | 결정 장애 탈출 메뉴 추천기">
+    <meta property="og:description" content="고민 없이 바로 정하는 오늘의 운명 메뉴! 지금 슬롯을 돌려보세요.">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- 구글 애드센스 스크립트 -->
     <meta name="google-adsense-account" content="ca-pub-3060510773916611">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3060510773916611" crossorigin="anonymous"></script>
+    
     <script>
         (function() {
             const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -17,6 +26,7 @@
             document.documentElement.setAttribute('data-lang', savedLang);
         })();
     </script>
+    
     <style>
         :root {
             --bg-color: #fffaf5;
@@ -57,16 +67,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 20px 10px;
             transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
         }
 
         .container {
             position: relative;
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             background: var(--card-bg);
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(255, 107, 107, 0.1);
@@ -74,6 +84,7 @@
             text-align: center;
             border: 2px solid var(--border-color);
             transition: all 0.3s ease;
+            margin-bottom: 20px;
         }
 
         .top-controls {
@@ -121,7 +132,6 @@
             margin-bottom: 30px;
         }
 
-        /* 이미지 컨테이너 */
         .image-container {
             width: 100%;
             height: 220px;
@@ -164,7 +174,6 @@
             100% { transform: scale(1); opacity: 0.2; }
         }
 
-        /* 슬롯머신 스타일 */
         .slot-machine {
             background: var(--slot-bg);
             height: 80px;
@@ -187,7 +196,6 @@
             transition: transform 0.1s ease-in-out;
         }
 
-        /* 카테고리 선택 */
         .category-container {
             display: flex;
             flex-wrap: wrap;
@@ -220,7 +228,6 @@
             box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
         }
 
-        /* 메인 버튼 */
         .btn-recommend {
             width: 100%;
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
@@ -246,7 +253,6 @@
             transform: none;
         }
 
-        /* 기록 영역 */
         .history-section {
             margin-top: 40px;
             padding-top: 25px;
@@ -324,20 +330,58 @@
         .history-time { font-size: 11px; color: var(--text-secondary); }
         .no-history { color: var(--text-secondary); font-size: 14px; padding: 20px; }
 
-        @media (max-width: 480px) {
-            .container { padding: 30px 20px; }
-            h1 { font-size: 26px; }
-            .slot-content { font-size: 24px; }
-            .image-container { height: 180px; }
+        /* SEO 가치 창출을 위한 추가 콘텐츠 영역 */
+        .content-section {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 30px 24px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
+            text-align: left;
         }
 
-        /* 푸터 제휴 문의 링크 */
-        .footer-links {
-            margin-top: 20px;
+        .content-section h2 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+        }
+
+        .content-section p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .content-section ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .content-section li {
+            margin-bottom: 6px;
+        }
+
+        /* 푸터 영역 */
+        footer {
+            margin-top: 10px;
+            margin-bottom: 30px;
             text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
         }
 
-        .link-contact {
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .link-footer {
             color: var(--text-secondary);
             text-decoration: underline;
             background: none;
@@ -348,11 +392,11 @@
             transition: color 0.2s;
         }
 
-        .link-contact:hover {
+        .link-footer:hover {
             color: var(--primary-color);
         }
 
-        /* 제휴 문의 모달 */
+        /* 모달 공통 스타일 */
         .modal {
             display: none;
             position: fixed;
@@ -369,16 +413,16 @@
             animation: fadeInModal 0.3s ease;
         }
 
-        .modal.show {
-            display: flex;
-        }
+        .modal.show { display: flex; }
 
         .modal-content {
             background: var(--card-bg);
             border: 2px solid var(--border-color);
             border-radius: 24px;
             width: 100%;
-            max-width: 440px;
+            max-width: 480px;
+            max-height: 80vh;
+            overflow-y: auto;
             padding: 30px 24px;
             position: relative;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -386,15 +430,8 @@
             animation: slideUpModal 0.3s ease;
         }
 
-        @keyframes fadeInModal {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUpModal {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpModal { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         .modal-header {
             display: flex;
@@ -420,10 +457,7 @@
             line-height: 1;
         }
 
-        .form-group {
-            margin-bottom: 16px;
-        }
-
+        .form-group { margin-bottom: 16px; }
         .form-group label {
             display: block;
             font-size: 14px;
@@ -445,14 +479,8 @@
             transition: border-color 0.2s;
         }
 
-        .form-control:focus {
-            border-color: var(--primary-color);
-        }
-
-        textarea.form-control {
-            resize: none;
-            height: 100px;
-        }
+        .form-control:focus { border-color: var(--primary-color); }
+        textarea.form-control { resize: none; height: 100px; }
 
         .btn-submit {
             width: 100%;
@@ -469,15 +497,14 @@
             margin-top: 10px;
         }
 
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
-        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3); }
+        .btn-submit:disabled { filter: grayscale(1); cursor: not-allowed; transform: none; }
 
-        .btn-submit:disabled {
-            filter: grayscale(1);
-            cursor: not-allowed;
-            transform: none;
+        @media (max-width: 480px) {
+            .container { padding: 30px 20px; }
+            h1 { font-size: 26px; }
+            .slot-content { font-size: 24px; }
+            .image-container { height: 180px; }
         }
     </style>
 </head>
@@ -493,12 +520,10 @@
 
         <div class="image-container">
             <div class="image-placeholder">🍱</div>
-            <img id="foodImage" src="" alt="Food Image">
+            <img id="foodImage" src="" alt="추천 음식 이미지">
         </div>
 
-        <div class="category-container" id="categoryContainer">
-            <!-- Categories injected here -->
-        </div>
+        <div class="category-container" id="categoryContainer"></div>
 
         <div class="slot-machine">
             <div class="slot-content" id="slotContent">Ready?</div>
@@ -517,16 +542,35 @@
         </div>
     </div>
 
-    <div class="footer-links">
-        <button id="btnContact" class="link-contact" onclick="openContactModal()">제휴 문의</button>
-    </div>
+    <!-- SEO 및 유저 가치 제공을 위한 설명 섹션 -->
+    <article class="content-section" id="seoContent">
+        <h2>매일 반복되는 '오늘 뭐 먹지?' 고민 해결법</h2>
+        <p>점심시간이나 퇴근 후 저녁 메뉴를 정할 때 결정 장애를 겪으신 적이 있나요? '오늘 뭐 먹지?' 서비스는 직장인, 학생, 혼밥족들의 메뉴 선택 스트레스를 완화하기 위해 제작된 음식 랜덤 추천 도구입니다.</p>
+        
+        <h2>스마트 메뉴 추천 활용 가이드</h2>
+        <ul>
+            <li><strong>카테고리 선택:</strong> 한식, 일식, 중식, 양식, 분식, 디저트 중 원하시는 종류를 선택하세요.</li>
+            <li><strong>원클릭 추천:</strong> '추천해줘!' 버튼을 누르면 슬롯머신이 작동하여 오늘의 메뉴를 선정합니다.</li>
+            <li><strong>최근 기록 활용:</strong> 하단의 최근 선택 기록을 통해 직전 식사와 중복되지 않도록 균형 잡힌 식단을 구성해 보세요.</li>
+        </ul>
+    </article>
+
+    <!-- 푸터 영역 -->
+    <footer>
+        <div class="footer-links">
+            <button class="link-footer" onclick="openModal('privacyModal')">개인정보처리방침</button>
+            <button class="link-footer" onclick="openModal('termsModal')">이용약관</button>
+            <button class="link-footer" onclick="openModal('contactModal')">제휴 및 문의</button>
+        </div>
+        <p>© 2026 What Should I Eat Today. All rights reserved.</p>
+    </footer>
 
     <!-- 제휴 문의 모달 -->
-    <div id="contactModal" class="modal" onclick="handleModalClick(event)">
+    <div id="contactModal" class="modal" onclick="handleModalClick(event, 'contactModal')">
         <div class="modal-content">
             <div class="modal-header">
                 <span class="modal-title" id="modalTitle">제휴 및 문의</span>
-                <button class="btn-close" onclick="closeContactModal()">&times;</button>
+                <button class="btn-close" onclick="closeModal('contactModal')">&times;</button>
             </div>
             <form id="contactForm" onsubmit="submitForm(event)">
                 <div class="form-group">
@@ -550,6 +594,37 @@
         </div>
     </div>
 
+    <!-- 개인정보처리방침 모달 (애드센스 필수 요구사항) -->
+    <div id="privacyModal" class="modal" onclick="handleModalClick(event, 'privacyModal')">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">개인정보처리방침</span>
+                <button class="btn-close" onclick="closeModal('privacyModal')">&times;</button>
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary);">
+                <p style="margin-bottom: 10px;">본 웹사이트는 이용자의 개인정보보호를 매우 중요시하며, 관련 법령을 준수합니다.</p>
+                <h4 style="color: var(--text-primary); margin: 10px 0 5px;">1. 수집하는 개인정보 항목</h4>
+                <p style="margin-bottom: 10px;">서비스 이용 과정에서 브라우저 로컬 스토리지에 테마, 언어 설정, 최근 메뉴 추천 기록이 저장될 수 있습니다.</p>
+                <h4 style="color: var(--text-primary); margin: 10px 0 5px;">2. 쿠키 및 광고 서비스</h4>
+                <p style="margin-bottom: 10px;">본 사이트는 타사 광고 공급업체(Google 등)를 사용하여 맞춤형 광고를 제공합니다. Google은 쿠키를 사용하여 이용자의 본 사이트 방문 기록을 바탕으로 광고를 제공합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 이용약관 모달 -->
+    <div id="termsModal" class="modal" onclick="handleModalClick(event, 'termsModal')">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">이용약관</span>
+                <button class="btn-close" onclick="closeModal('termsModal')">&times;</button>
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary);">
+                <p style="margin-bottom: 10px;">본 사이트에서 제공하는 메뉴 추천 정보는 참고용 서비스이며, 사용자의 선택에 대한 법적 책임을 지지 않습니다.</p>
+                <p>사이트 내의 콘텐츠와 디자인은 무단 복제를 금지합니다.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         const i18n = {
             ko: {
@@ -563,7 +638,7 @@
                 categories: {
                     all: "전체", korean: "한식", japanese: "일식", chinese: "중식", western: "양식", snack: "분식", dessert: "디저트"
                 },
-                contactLink: "제휴 문의",
+                contactLink: "제휴 및 문의",
                 contactTitle: "제휴 및 문의",
                 labelCompany: "회사명 / 이름",
                 placeholderCompany: "회사명 또는 이름을 입력해주세요",
@@ -636,8 +711,6 @@
             document.getElementById('btnClear').innerText = text.clear;
             document.getElementById('slotContent').innerText = text.ready;
             
-            // Translate contact-related elements
-            document.getElementById('btnContact').innerText = text.contactLink;
             document.getElementById('modalTitle').innerText = text.contactTitle;
             document.getElementById('labelCompany').innerText = text.labelCompany;
             document.getElementById('company').placeholder = text.placeholderCompany;
@@ -768,22 +841,21 @@
             document.getElementById('themeToggle').innerText = target === 'dark' ? '☀️' : '🌙';
         };
 
-        const openContactModal = () => {
-            const modal = document.getElementById('contactModal');
+        const openModal = (modalId) => {
+            const modal = document.getElementById(modalId);
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
         };
 
-        const closeContactModal = () => {
-            const modal = document.getElementById('contactModal');
+        const closeModal = (modalId) => {
+            const modal = document.getElementById(modalId);
             modal.classList.remove('show');
             document.body.style.overflow = '';
-            document.getElementById('contactForm').reset();
         };
 
-        const handleModalClick = (e) => {
-            if (e.target.id === 'contactModal') {
-                closeContactModal();
+        const handleModalClick = (e, modalId) => {
+            if (e.target.id === modalId) {
+                closeModal(modalId);
             }
         };
 
@@ -812,7 +884,8 @@
 
                 if (response.ok) {
                     alert(text.sendSuccess);
-                    closeContactModal();
+                    closeModal('contactModal');
+                    form.reset();
                 } else {
                     const errData = await response.json();
                     alert(errData.error || text.sendError);
