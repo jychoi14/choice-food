@@ -80,10 +80,12 @@
             right: 24px;
             display: flex;
             gap: 12px;
+            z-index: 10;
         }
 
         .btn-control {
-            background: none;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
             border: none;
             font-size: 18px;
             cursor: pointer;
@@ -117,38 +119,60 @@
             margin-bottom: 30px;
         }
 
+        /* 이미지 컨테이너 */
+        .image-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: var(--selector-bg);
+            border: 2px solid var(--border-color);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #foodImage {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        #foodImage.show {
+            opacity: 1;
+        }
+
+        .image-placeholder {
+            position: absolute;
+            font-size: 48px;
+            opacity: 0.5;
+        }
+
         /* 슬롯머신 스타일 */
         .slot-machine {
             background: var(--slot-bg);
-            height: 120px;
-            border-radius: 20px;
+            height: 80px;
+            border-radius: 15px;
             margin-bottom: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-            border: 4px solid var(--accent-color);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            border: 3px solid var(--accent-color);
         }
 
         .slot-content {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 900;
             color: var(--slot-text);
             text-shadow: 0 0 10px rgba(250, 177, 160, 0.5);
             transition: transform 0.1s ease-in-out;
-        }
-
-        .slot-label {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 10px;
-            color: rgba(255,255,255,0.3);
-            text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
         /* 카테고리 선택 */
@@ -271,8 +295,8 @@
         @media (max-width: 480px) {
             .container { padding: 30px 20px; }
             h1 { font-size: 26px; }
-            .slot-content { font-size: 28px; }
-            .top-controls { top: 15px; right: 15px; }
+            .slot-content { font-size: 24px; }
+            .image-container { height: 160px; }
         }
     </style>
 </head>
@@ -286,12 +310,16 @@
         <h1 id="title">오늘 뭐 먹지?</h1>
         <p class="subtitle" id="subtitle">결정 장애 탈출! 오늘 당신의 운명 메뉴는?</p>
 
+        <div class="image-container">
+            <div class="image-placeholder">🍽️</div>
+            <img id="foodImage" src="" alt="Food Image">
+        </div>
+
         <div class="category-container" id="categoryContainer">
             <!-- Categories will be injected -->
         </div>
 
         <div class="slot-machine">
-            <span class="slot-label">Menu Slot</span>
             <div class="slot-content" id="slotContent">Ready?</div>
         </div>
 
@@ -349,28 +377,28 @@
         };
 
         const menuData = [
-            { nameEn: "Kimchi Stew", nameKo: "김치찌개", category: "korean" },
-            { nameEn: "Soybean Paste Stew", nameKo: "된장찌개", category: "korean" },
-            { nameEn: "Bulgogi", nameKo: "불고기", category: "korean" },
-            { nameEn: "Bibimbap", nameKo: "비빔밥", category: "korean" },
-            { nameEn: "Sushi", nameKo: "초밥", category: "japanese" },
-            { nameEn: "Ramen", nameKo: "라멘", category: "japanese" },
-            { nameEn: "Tonkatsu", nameKo: "돈가스", category: "japanese" },
-            { nameEn: "Tteokbokki", nameKo: "떡볶이", category: "snack" },
-            { nameEn: "Kimbap", nameKo: "김밥", category: "snack" },
-            { nameEn: "Jajangmyeon", nameKo: "짜장면", category: "chinese" },
-            { nameEn: "Jjamppong", nameKo: "짬뽕", category: "chinese" },
-            { nameEn: "Pasta", nameKo: "파스타", category: "western" },
-            { nameEn: "Pizza", nameKo: "피자", category: "western" },
-            { nameEn: "Steak", nameKo: "스테이크", category: "western" },
-            { nameEn: "Burger", nameKo: "햄버거", category: "western" },
-            { nameEn: "Waffle", nameKo: "와플", category: "dessert" },
-            { nameEn: "Cake", nameKo: "조각케이크", category: "dessert" }
+            { nameEn: "Kimchi Stew", nameKo: "김치찌개", category: "korean", keyword: "kimchi-jjigae" },
+            { nameEn: "Soybean Paste Stew", nameKo: "된장찌개", category: "korean", keyword: "soybean-paste-stew" },
+            { nameEn: "Bulgogi", nameKo: "불고기", category: "korean", keyword: "bulgogi" },
+            { nameEn: "Bibimbap", nameKo: "비빔밥", category: "korean", keyword: "bibimbap" },
+            { nameEn: "Sushi", nameKo: "초밥", category: "japanese", keyword: "sushi" },
+            { nameEn: "Ramen", nameKo: "라멘", category: "japanese", keyword: "ramen" },
+            { nameEn: "Tonkatsu", nameKo: "돈가스", category: "japanese", keyword: "tonkatsu" },
+            { nameEn: "Tteokbokki", nameKo: "떡볶이", category: "snack", keyword: "tteokbokki" },
+            { nameEn: "Kimbap", nameKo: "김밥", category: "snack", keyword: "kimbap" },
+            { nameEn: "Jajangmyeon", nameKo: "짜장면", category: "chinese", keyword: "jajangmyeon" },
+            { nameEn: "Jjamppong", nameKo: "짬뽕", category: "chinese", keyword: "jjamppong" },
+            { nameEn: "Pasta", nameKo: "파스타", category: "western", keyword: "pasta" },
+            { nameEn: "Pizza", nameKo: "피자", category: "western", keyword: "pizza" },
+            { nameEn: "Steak", nameKo: "스테이크", category: "western", keyword: "steak" },
+            { nameEn: "Burger", nameKo: "햄버거", category: "western", keyword: "burger" },
+            { nameEn: "Waffle", nameKo: "와플", category: "dessert", keyword: "waffle" },
+            { nameEn: "Cake", nameKo: "조각케이크", category: "dessert", keyword: "cake" }
         ];
 
         let currentLang = localStorage.getItem('lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
         let currentCategory = "all";
-        const HISTORY_KEY = 'food_history_v2';
+        const HISTORY_KEY = 'food_history_v3';
 
         const updateUI = () => {
             const text = i18n[currentLang];
@@ -453,9 +481,12 @@
         const startRecommendation = () => {
             const btn = document.getElementById('btnRecommend');
             const slot = document.getElementById('slotContent');
+            const img = document.getElementById('foodImage');
             const filtered = currentCategory === "all" ? menuData : menuData.filter(m => m.category === currentCategory);
             
             btn.disabled = true;
+            img.classList.remove('show');
+            
             let count = 0;
             const maxTicks = 15;
             const interval = setInterval(() => {
@@ -468,6 +499,12 @@
                     const finalMenu = filtered[Math.floor(Math.random() * filtered.length)];
                     slot.innerText = currentLang === 'ko' ? finalMenu.nameKo : finalMenu.nameEn;
                     slot.style.transform = 'scale(1.2)';
+                    
+                    // Update Image
+                    const imgUrl = `https://source.unsplash.com/800x600/?${finalMenu.keyword},food`;
+                    img.src = imgUrl;
+                    img.onload = () => img.classList.add('show');
+                    
                     setTimeout(() => slot.style.transform = 'scale(1)', 200);
                     playSound('win');
                     saveHistory(finalMenu);
