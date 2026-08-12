@@ -122,7 +122,7 @@
         /* 이미지 컨테이너 */
         .image-container {
             width: 100%;
-            height: 200px;
+            height: 220px;
             border-radius: 20px;
             margin-bottom: 20px;
             overflow: hidden;
@@ -132,24 +132,34 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         #foodImage {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s ease, transform 0.5s ease;
             opacity: 0;
+            transform: scale(1.1);
         }
 
         #foodImage.show {
             opacity: 1;
+            transform: scale(1);
         }
 
         .image-placeholder {
             position: absolute;
-            font-size: 48px;
-            opacity: 0.5;
+            font-size: 60px;
+            opacity: 0.2;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.2; }
         }
 
         /* 슬롯머신 스타일 */
@@ -215,7 +225,7 @@
             color: #ffffff;
             border: none;
             padding: 18px;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 900;
             border-radius: 18px;
             cursor: pointer;
@@ -231,6 +241,7 @@
         .btn-recommend:disabled {
             filter: grayscale(1);
             cursor: not-allowed;
+            transform: none;
         }
 
         /* 기록 영역 */
@@ -265,29 +276,48 @@
         .history-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-height: 200px;
+            gap: 12px;
+            max-height: 250px;
             overflow-y: auto;
             padding-right: 5px;
         }
 
         .history-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             background: var(--selector-bg);
-            padding: 12px 18px;
+            padding: 10px 15px;
             border-radius: 15px;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
         }
 
-        .history-menu { font-weight: 700; color: var(--primary-color); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .history-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+        }
+
+        .history-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .history-menu { font-weight: 700; color: var(--primary-color); display: block; }
         .history-tag {
             font-size: 10px;
             background: var(--accent-color);
             color: white;
             padding: 2px 6px;
             border-radius: 4px;
-            margin-right: 8px;
+            margin-right: 5px;
         }
         .history-time { font-size: 11px; color: var(--text-secondary); }
         .no-history { color: var(--text-secondary); font-size: 14px; padding: 20px; }
@@ -296,7 +326,7 @@
             .container { padding: 30px 20px; }
             h1 { font-size: 26px; }
             .slot-content { font-size: 24px; }
-            .image-container { height: 160px; }
+            .image-container { height: 180px; }
         }
     </style>
 </head>
@@ -304,19 +334,19 @@
 
     <div class="container">
         <div class="top-controls">
-            <button id="langToggle" class="btn-control" onclick="toggleLang()" aria-label="언어 전환">🌐</button>
-            <button id="themeToggle" class="btn-control" onclick="toggleTheme()" aria-label="테마 전환">🌙</button>
+            <button id="langToggle" class="btn-control" onclick="toggleLang()" aria-label="Language Toggle">🌐</button>
+            <button id="themeToggle" class="btn-control" onclick="toggleTheme()" aria-label="Theme Toggle">🌙</button>
         </div>
         <h1 id="title">오늘 뭐 먹지?</h1>
         <p class="subtitle" id="subtitle">결정 장애 탈출! 오늘 당신의 운명 메뉴는?</p>
 
         <div class="image-container">
-            <div class="image-placeholder">🍽️</div>
+            <div class="image-placeholder">🍱</div>
             <img id="foodImage" src="" alt="Food Image">
         </div>
 
         <div class="category-container" id="categoryContainer">
-            <!-- Categories will be injected -->
+            <!-- Categories injected here -->
         </div>
 
         <div class="slot-machine">
@@ -347,13 +377,7 @@
                 noHistory: "아직 기록이 없어요.",
                 ready: "준비됐나요?",
                 categories: {
-                    all: "전체",
-                    korean: "한식",
-                    japanese: "일식",
-                    chinese: "중식",
-                    western: "양식",
-                    snack: "분식",
-                    dessert: "디저트"
+                    all: "전체", korean: "한식", japanese: "일식", chinese: "중식", western: "양식", snack: "분식", dessert: "디저트"
                 }
             },
             en: {
@@ -365,40 +389,31 @@
                 noHistory: "No history yet.",
                 ready: "Ready?",
                 categories: {
-                    all: "All",
-                    korean: "Korean",
-                    japanese: "Japanese",
-                    chinese: "Chinese",
-                    western: "Western",
-                    snack: "Snack",
-                    dessert: "Dessert"
+                    all: "All", korean: "Korean", japanese: "Japanese", chinese: "Chinese", western: "Western", snack: "Snack", dessert: "Dessert"
                 }
             }
         };
 
         const menuData = [
-            { nameEn: "Kimchi Stew", nameKo: "김치찌개", category: "korean", keyword: "kimchi-jjigae" },
-            { nameEn: "Soybean Paste Stew", nameKo: "된장찌개", category: "korean", keyword: "soybean-paste-stew" },
-            { nameEn: "Bulgogi", nameKo: "불고기", category: "korean", keyword: "bulgogi" },
+            { nameEn: "Kimchi Stew", nameKo: "김치찌개", category: "korean", keyword: "kimchi,stew" },
             { nameEn: "Bibimbap", nameKo: "비빔밥", category: "korean", keyword: "bibimbap" },
+            { nameEn: "Bulgogi", nameKo: "불고기", category: "korean", keyword: "bulgogi" },
             { nameEn: "Sushi", nameKo: "초밥", category: "japanese", keyword: "sushi" },
             { nameEn: "Ramen", nameKo: "라멘", category: "japanese", keyword: "ramen" },
-            { nameEn: "Tonkatsu", nameKo: "돈가스", category: "japanese", keyword: "tonkatsu" },
+            { nameEn: "Tonkatsu", nameKo: "돈가스", category: "japanese", keyword: "cutlet" },
             { nameEn: "Tteokbokki", nameKo: "떡볶이", category: "snack", keyword: "tteokbokki" },
-            { nameEn: "Kimbap", nameKo: "김밥", category: "snack", keyword: "kimbap" },
-            { nameEn: "Jajangmyeon", nameKo: "짜장면", category: "chinese", keyword: "jajangmyeon" },
-            { nameEn: "Jjamppong", nameKo: "짬뽕", category: "chinese", keyword: "jjamppong" },
+            { nameEn: "Jajangmyeon", nameKo: "짜장면", category: "chinese", keyword: "black-bean-noodles" },
             { nameEn: "Pasta", nameKo: "파스타", category: "western", keyword: "pasta" },
             { nameEn: "Pizza", nameKo: "피자", category: "western", keyword: "pizza" },
-            { nameEn: "Steak", nameKo: "스테이크", category: "western", keyword: "steak" },
             { nameEn: "Burger", nameKo: "햄버거", category: "western", keyword: "burger" },
+            { nameEn: "Steak", nameKo: "스테이크", category: "western", keyword: "steak" },
             { nameEn: "Waffle", nameKo: "와플", category: "dessert", keyword: "waffle" },
             { nameEn: "Cake", nameKo: "조각케이크", category: "dessert", keyword: "cake" }
         ];
 
         let currentLang = localStorage.getItem('lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
         let currentCategory = "all";
-        const HISTORY_KEY = 'food_history_v3';
+        const HISTORY_KEY = 'food_history_v4';
 
         const updateUI = () => {
             const text = i18n[currentLang];
@@ -432,7 +447,7 @@
                 osc.connect(gain); gain.connect(ctx.destination);
                 if (type === 'tick') {
                     osc.frequency.setValueAtTime(440, ctx.currentTime);
-                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
                     osc.start(); osc.stop(ctx.currentTime + 0.05);
                 } else if (type === 'win') {
@@ -454,20 +469,21 @@
             }
             list.innerHTML = history.map(item => `
                 <div class="history-item">
-                    <div>
-                        <span class="history-tag">${i18n[currentLang].categories[item.category]}</span>
+                    <img src="${item.imgUrl}" class="history-img" alt="food">
+                    <div class="history-info">
                         <span class="history-menu">${currentLang === 'ko' ? item.nameKo : item.nameEn}</span>
+                        <span class="history-tag">${i18n[currentLang].categories[item.category]}</span>
+                        <span class="history-time">${item.time}</span>
                     </div>
-                    <span class="history-time">${item.time}</span>
                 </div>
             `).join('');
         };
 
-        const saveHistory = (menu) => {
+        const saveHistory = (menu, imgUrl) => {
             const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
             const now = new Date();
             const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-            history.unshift({ ...menu, time });
+            history.unshift({ ...menu, time, imgUrl });
             if (history.length > 10) history.pop();
             localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
             loadHistory();
@@ -488,7 +504,7 @@
             img.classList.remove('show');
             
             let count = 0;
-            const maxTicks = 15;
+            const maxTicks = 12;
             const interval = setInterval(() => {
                 const randomMenu = filtered[Math.floor(Math.random() * filtered.length)];
                 slot.innerText = currentLang === 'ko' ? randomMenu.nameKo : randomMenu.nameEn;
@@ -500,17 +516,16 @@
                     slot.innerText = currentLang === 'ko' ? finalMenu.nameKo : finalMenu.nameEn;
                     slot.style.transform = 'scale(1.2)';
                     
-                    // Update Image
-                    const imgUrl = `https://source.unsplash.com/800x600/?${finalMenu.keyword},food`;
+                    const imgUrl = `https://loremflickr.com/400/300/food,${finalMenu.keyword}`;
                     img.src = imgUrl;
                     img.onload = () => img.classList.add('show');
                     
                     setTimeout(() => slot.style.transform = 'scale(1)', 200);
                     playSound('win');
-                    saveHistory(finalMenu);
+                    saveHistory(finalMenu, imgUrl);
                     btn.disabled = false;
                 }
-            }, 120);
+            }, 150);
         };
 
         const toggleLang = () => {
